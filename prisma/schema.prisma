@@ -1,0 +1,387 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and user management
+model User {
+  id              String   @id @default(cuid())
+  phone           String   @unique
+  name            String
+  email           String?  @unique
+  password        String?  // Optional for OTP-based authentication
+  role            UserRole @default(CITIZEN)
+  isVerified      Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  lastLoginAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  incidents               Incident[]
+  trustedContacts         TrustedContact[]       @relation("UserContacts")
+  trustedByContacts       TrustedContact[]       @relation("TrustedByUser")
+  pathGuardSessions       PathGuardSession[]
+  dangerZoneReports       DangerZoneReport[]
+  responderProfile        ResponderProfile?
+  notifications           Notification[]
+  deviceTokens            DeviceToken[]
+
+  @@map("users")
+}
+
+// User roles enumeration
+enum UserRole {
+  CITIZEN
+  COMMUNITY_RESPONDER
+  POLICE_OFFICER
+  ADMIN
+  SUPER_ADMIN
+}
+
+// Trusted contacts for emergency alerts
+model TrustedContact {
+  id          String @id @default(cuid())
+  userId      String
+  contactName String
+  contactPhone String
+  contactEmail String?
+  relationship String?
+  isPrimary   Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user User @relation("UserContacts", fields: [userId], references: [id], onDelete: Cascade)
+  trustedByUsers User[] @relation("TrustedByUser")
+
+  @@map("trusted_contacts")
+}
+
+// Incident/SOS records
+model Incident {
+  id              String        @id @default(cuid())
+  userId          String
+  type            IncidentType
+  severity        Severity      @default(MEDIUM)
+  status          IncidentStatus @default(ACTIVE)
+  title           String?
+  description     String?
+  locationLat     Float
+  locationLng     Float
+  locationAddress String?
+  isSilentSOS     Boolean       @default(false)
+  isOfflineAlert  Boolean       @default(false)
+  resolvedAt      DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mediaFiles    MediaFile[]
+  responderActions ResponderAction[]
+  notifications  Notification[]
+
+  @@map("incidents")
+}
+
+// Incident types enumeration
+enum IncidentType {
+  THEFT
+  ASSAULT
+  MEDICAL_EMERGENCY
+  ACCIDENT
+  FIRE
+  SUSPICIOUS_ACTIVITY
+  HARASSMENT
+  KIDNAPPING
+  OTHER
+}
+
+// Incident severity levels
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Incident status tracking
+enum IncidentStatus {
+  ACTIVE
+  RESPONDERS_DISPATCHED
+  IN_PROGRESS
+  RESOLVED
+  FALSE_ALARM
+  CANCELLED
+}
+
+// Media files (audio/video evidence)
+model MediaFile {
+  id          String     @id @default(cuid())
+  incidentId  String
+  type        MediaType
+  filePath    String
+  fileName    String
+  fileSize    Int
+  duration    Int?       // in seconds for audio/video
+  isEncrypted Boolean    @default(true)
+  encryptionKey String?  // Store encrypted key
+  thumbnailPath String?  // For video files
+  createdAt   DateTime   @default(now())
+
+  // Relations
+  incident Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@map("media_files")
+}
+
+// Media types
+enum MediaType {
+  AUDIO
+  VIDEO
+  IMAGE
+  DOCUMENT
+}
+
+// PathGuard session for night walking protection
+model PathGuardSession {
+  id                String   @id @default(cuid())
+  userId            String
+  isActive          Boolean  @default(true)
+  startLocationLat  Float
+  startLocationLng  Float
+  destinationLat    Float?
+  destinationLng    Float?
+  currentLocationLat Float?
+  currentLocationLng Float?
+  deviationThreshold Float   @default(50)    // meters
+  immobilityTimeout Int     @default(300)   // seconds
+  lastActivityAt    DateTime @default(now())
+  emergencyTriggered Boolean @default(false)
+  incidentId        String?  // Links to incident if SOS is triggered
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  locationUpdates LocationUpdate[]
+
+  @@map("path_guard_sessions")
+}
+
+// Location tracking updates for PathGuard
+model LocationUpdate {
+  id                   String   @id @default(cuid())
+  pathGuardSessionId   String
+  latitude             Float
+  longitude            Float
+  accuracy             Float?
+  speed                Float?
+  heading              Float?
+  timestamp            DateTime @default(now())
+
+  // Relations
+  pathGuardSession PathGuardSession @relation(fields: [pathGuardSessionId], references: [id], onDelete: Cascade)
+
+  @@map("location_updates")
+}
+
+// Community responder profiles
+model ResponderProfile {
+  id              String         @id @default(cuid())
+  userId          String         @unique
+  isAvailable     Boolean        @default(true)
+  currentLocationLat Float?
+  currentLocationLng Float?
+  lastLocationUpdate DateTime?
+  responseRadius   Float          @default(5000) // meters
+  totalResponses   Int            @default(0)
+  verifiedResponses Int           @default(0)
+  averageResponseTime Float?      // in minutes
+  rating           Float?         // 1-5 scale
+  skills           String[]       // e.g., ["first_aid", "self_defense"]
+  certifications   String[]       // e.g., ["cpr", "security_training"]
+  isVerified       Boolean        @default(false)
+  verificationDocument String?    // Path to verification doc
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // Relations
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  responderActions ResponderAction[]
+
+  @@map("responder_profiles")
+}
+
+// Responder actions during incidents
+model ResponderAction {
+  id          String           @id @default(cuid())
+  incidentId  String
+  responderId String
+  actionType  ResponderActionType
+  status      ActionStatus     @default(PENDING)
+  notes       String?
+  responseTime Int?            // in seconds
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  incident  Incident         @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  responder ResponderProfile @relation(fields: [responderId], references: [id], onDelete: Cascade)
+
+  @@map("responder_actions")
+}
+
+// Responder action types
+enum ResponderActionType {
+  ACCEPTED
+  DISPATCHED
+  ON_SCENE
+  ASSISTING
+  COMPLETED
+  CANCELLED
+}
+
+// Action status
+enum ActionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Danger zone reports
+model DangerZoneReport {
+  id              String   @id @default(cuid())
+  userId          String
+  locationLat     Float
+  locationLng     Float
+  locationAddress String?
+  dangerType      DangerType
+  description     String
+  severity        Severity @default(MEDIUM)
+  isActive        Boolean  @default(true)
+  verifiedCount   Int      @default(0)
+  reportCount     Int      @default(1)
+  lastReportedAt  DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("danger_zone_reports")
+}
+
+// Types of dangers
+enum DangerType {
+  POOR_LIGHTING
+  HIGH_CRIME_AREA
+  ISOLATED_AREA
+  CONSTRUCTION_ZONE
+  TRAFFIC_HAZARD
+  KNOWN_HANGOUT_SPOT
+  OTHER
+}
+
+// Notification system
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String
+  incidentId  String?
+  type        NotificationType
+  title       String
+  message     String
+  isRead      Boolean          @default(false)
+  channels    NotificationChannel[]
+  sentAt      DateTime         @default(now())
+  readAt      DateTime?
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  incident Incident? @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// Notification types
+enum NotificationType {
+  SOS_ALERT
+  RESPONDER_DISPATCHED
+  INCIDENT_RESOLVED
+  DANGER_ZONE_ALERT
+  PATH_GUARD_ALERT
+  SYSTEM_ANNOUNCEMENT
+}
+
+// Notification channels
+enum NotificationChannel {
+  PUSH_NOTIFICATION
+  SMS
+  EMAIL
+  IN_APP
+  USSD
+}
+
+// Device tokens for push notifications
+model DeviceToken {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String
+  deviceType   DeviceType
+  isActive     Boolean  @default(true)
+  lastUsedAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, token])
+  @@map("device_tokens")
+}
+
+// Device types
+enum DeviceType {
+  ANDROID
+  IOS
+  WEB
+  USSD
+}
+
+// System audit log
+model AuditLog {
+  id          String       @id @default(cuid())
+  userId      String?
+  action      String
+  resource    String
+  resourceId  String?
+  oldValues   Json?
+  newValues   Json?
+  ipAddress   String?
+  userAgent   String?
+  timestamp   DateTime     @default(now())
+
+  @@map("audit_logs")
+}
+
+// System settings
+model SystemSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("system_settings")
+}
