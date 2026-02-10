@@ -15,7 +15,7 @@ export class EmailConsumerService implements OnModuleInit {
 
   constructor() {
     // Create nodemailer transporter
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_SMTP_HOST,
       port: parseInt(process.env.EMAIL_SMTP_PORT || '587'),
       secure: false, // true for 465, false for other ports

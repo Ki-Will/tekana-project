@@ -101,4 +101,17 @@ export class MediaConsumerService implements OnModuleInit {
       console.log(`[DEV] Media uploaded and updated for incident ${incidentId}`);
     }
   }
+
+  private getContentType(type: string): string {
+    switch (type) {
+      case 'IMAGE':
+        return 'image/jpeg';
+      case 'VIDEO':
+        return 'video/mp4';
+      case 'AUDIO':
+        return 'audio/mpeg';
+      default:
+        return 'application/octet-stream';
+    }
+  }
 }

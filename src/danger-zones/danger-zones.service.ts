@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDangerZoneDto } from './dto/create-danger-zone.dto';
-import { DangerZone, Prisma } from '@prisma/client';
+import { DangerZoneReport, Prisma } from '@prisma/client';
 import { FcmService } from '../messaging/fcm.service';
 
 @Injectable()
@@ -13,8 +13,8 @@ export class DangerZonesService {
     private readonly fcmService: FcmService,
   ) {}
 
-  async create(userId: string, dto: CreateDangerZoneDto): Promise<DangerZone> {
-    const dangerZone = await this.prisma.dangerZone.create({
+  async create(userId: string, dto: CreateDangerZoneDto): Promise<DangerZoneReport> {
+    const dangerZone = await this.prisma.dangerZoneReport.create({
       data: {
         userId,
         locationLat: dto.locationLat,
@@ -38,15 +38,15 @@ export class DangerZonesService {
     userId?: string;
     skip?: number;
     take?: number;
-  }): Promise<{ dangerZones: DangerZone[]; total: number }> {
-    const where: Prisma.DangerZoneWhereInput = {};
+  }): Promise<{ dangerZones: DangerZoneReport[]; total: number }> {
+    const where: Prisma.DangerZoneReportWhereInput = {};
 
     if (filter?.dangerType) where.dangerType = filter.dangerType as any;
     if (filter?.severity) where.severity = filter.severity as any;
     if (filter?.userId) where.userId = filter.userId;
 
     const [dangerZones, total] = await Promise.all([
-      this.prisma.dangerZone.findMany({
+      this.prisma.dangerZoneReport.findMany({
         where,
         skip: filter?.skip,
         take: filter?.take,
@@ -57,14 +57,14 @@ export class DangerZonesService {
           },
         },
       }),
-      this.prisma.dangerZone.count({ where }),
+      this.prisma.dangerZoneReport.count({ where }),
     ]);
 
     return { dangerZones, total };
   }
 
-  async findOne(id: string): Promise<DangerZone> {
-    const dangerZone = await this.prisma.dangerZone.findUnique({
+  async findOne(id: string): Promise<DangerZoneReport> {
+    const dangerZone = await this.prisma.dangerZoneReport.findUnique({
       where: { id },
       include: {
         user: {
@@ -80,8 +80,8 @@ export class DangerZonesService {
     return dangerZone;
   }
 
-  async update(id: string, updateData: Partial<CreateDangerZoneDto>): Promise<DangerZone> {
-    const dangerZone = await this.prisma.dangerZone.update({
+  async update(id: string, updateData: Partial<CreateDangerZoneDto>): Promise<DangerZoneReport> {
+    const dangerZone = await this.prisma.dangerZoneReport.update({
       where: { id },
       data: updateData,
     });
@@ -90,7 +90,7 @@ export class DangerZonesService {
   }
 
   async remove(id: string): Promise<void> {
-    await this.prisma.dangerZone.delete({
+    await this.prisma.dangerZoneReport.delete({
       where: { id },
     });
   }
@@ -98,7 +98,7 @@ export class DangerZonesService {
   async getAggregatedZones(): Promise<any> {
     // Placeholder for aggregated danger zones (e.g., heatmaps)
     // Could use PostGIS or similar for spatial aggregation
-    const zones = await this.prisma.dangerZone.findMany({
+    const zones = await this.prisma.dangerZoneReport.findMany({
       where: { isActive: true },
       select: {
         locationLat: true,
