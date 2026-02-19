@@ -1,98 +1,244 @@
+# Tekana - Safety & Rescue Platform
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS" />
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
+  <img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📋 Description
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Tekana is a mobile-first safety and rescue platform designed to provide instant emergency alerts and community-driven safety features. It enables users to send one-tap SOS alerts with GPS location, audio/video evidence, and integrates with emergency responders for rapid response.
 
-## Description
+## ✨ Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **One-Tap SOS**: Instant emergency alerts with GPS location
+- **Media Upload**: Audio/video evidence capture and async processing
+- **PathGuard**: Night walking protection with safety routes
+- **Live Streaming**: RTMP-based live video streaming with automatic recording
+- **Community Danger Zones**: Map-based danger zone reporting and alerts
+- **Offline Alerts**: SMS/USSD fallbacks for network issues
+- **Push Notifications**: Real-time FCM notifications
+- **Web Dashboard**: Administrative interface for authorities
+- **Incident Management**: Comprehensive incident tracking and response
 
-## Project setup
+## 🛠 Tech Stack
 
+### Backend
+- **Framework**: NestJS (Node.js)
+- **Database**: PostgreSQL with Prisma ORM
+- **Caching**: Redis
+- **Message Queue**: RabbitMQ
+- **File Storage**: MinIO (S3-compatible)
+- **Live Streaming**: Nginx RTMP Module
+- **Authentication**: JWT
+- **Notifications**: Firebase Cloud Messaging (FCM)
+
+### Infrastructure
+- **Containerization**: Docker & Docker Compose
+- **Deployment**: Production-ready with profiles
+
+## 📋 Prerequisites
+
+- Docker & Docker Compose
+- Node.js 18+ (for local development)
+- Git
+
+## 🚀 Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/tekana.git
+   cd tekana
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup:**
+   Copy the example environment file and configure:
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` with your configuration:
+   ```env
+   # Database
+   DATABASE_URL="postgresql://tekana:password@localhost:5432/tekana"
+
+   # JWT
+   JWT_SECRET="your-jwt-secret"
+
+   # Firebase
+   FCM_SERVER_KEY="your-fcm-server-key"
+
+   # Port
+   PORT=3000
+
+   # RabbitMQ (optional, defaults provided)
+   RABBITMQ_URL="amqp://guest:guest@localhost:5672"
+
+   # Redis (optional, defaults provided)
+   REDIS_URL="redis://localhost:6379"
+
+   # MinIO/S3
+   S3_ENDPOINT="http://localhost:9000"
+   AWS_ACCESS_KEY_ID="minioadmin"
+   AWS_SECRET_ACCESS_KEY="minioadmin"
+   AWS_REGION="us-east-1"
+   S3_BUCKET_NAME="tekana-media"
+   ```
+
+## 🏃‍♂️ Running the Application
+
+### Development Environment
+
+Start all services with Docker Compose:
 ```bash
-$ npm install
+# Start all services (PostgreSQL, RabbitMQ, Redis, MinIO, RTMP, App)
+docker-compose --profile development up
+
+# Or run in background
+docker-compose --profile development up -d
 ```
 
-## Compile and run the project
+### Production Environment
 
+For production, only essential services:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+docker-compose --profile production up -d
 ```
 
-## Run tests
+### Local Development (without Docker)
+
+1. **Start dependencies:**
+   ```bash
+   docker-compose up postgres rabbitmq redis minio rtmp -d
+   ```
+
+2. **Run the app locally:**
+   ```bash
+   npm run start:dev
+   ```
+
+### Access Points
+
+- **API**: http://localhost:3000/api
+- **Health Check**: http://localhost:3000/api/health
+- **RabbitMQ Management**: http://localhost:15672 (guest/guest)
+- **MinIO Console**: http://localhost:9001 (minioadmin/minioadmin)
+- **RTMP Stream**: rtmp://localhost:1935/live
+
+## 📡 API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/refresh` - Refresh token
+
+### Incidents
+- `POST /api/incidents` - Report incident
+- `GET /api/incidents` - List incidents
+- `GET /api/incidents/:id` - Get incident details
+
+### Media
+- `POST /api/media/upload` - Upload media (async)
+- `GET /api/media/:id` - Get media
+
+### Streaming
+- `POST /api/streaming/publish` - RTMP publish hook
+- `POST /api/streaming/publish_done` - RTMP publish done hook
+- `POST /api/streaming/play` - RTMP play hook
+- `POST /api/streaming/play_done` - RTMP play done hook
+
+### Danger Zones
+- `POST /api/danger-zones` - Report danger zone
+- `GET /api/danger-zones` - List danger zones
+
+## 📹 Live Streaming
+
+Tekana supports RTMP live streaming with automatic recording to MinIO.
+
+### Streaming Setup
+
+1. **Publish Stream:**
+   ```bash
+   ffmpeg -f avfoundation -i "0:0" -f flv rtmp://localhost:1935/live/your-stream-key
+   ```
+
+2. **Play Stream:**
+   Use any RTMP player or VLC:
+   ```
+   rtmp://localhost:1935/live/your-stream-key
+   ```
+
+3. **Recorded Streams:**
+   Streams are automatically recorded and uploaded to MinIO at `streams/your-stream-key.flv`
+
+## 🧪 Testing
 
 ```bash
-# unit tests
-$ npm run test
+# Unit tests
+npm run test
 
-# e2e tests
-$ npm run test:e2e
+# E2E tests
+npm run test:e2e
 
-# test coverage
-$ npm run test:cov
+# Test coverage
+npm run test:cov
 ```
 
-## Deployment
+## 🏗 Database
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### Migrations
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Generate migration
+npx prisma migrate dev
+
+# Apply migrations
+npx prisma migrate deploy
+
+# Seed database
+npx prisma db seed
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Prisma Studio
+```bash
+npx prisma studio
+```
 
-## Resources
+## 🚢 Deployment
 
-Check out a few resources that may come in handy when working with NestJS:
+### Docker Build
+```bash
+docker build -t tekana .
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Production Compose
+```bash
+docker-compose --profile production up -d
+```
 
-## Support
+## 🤝 Contributing
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'Add some feature'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Open a Pull Request
 
-## Stay in touch
+## 📄 License
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## License
+## 📞 Support
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+For questions and support:
+- Create an issue on GitHub
+- Contact the development team
+
+## 🗺 Roadmap
