@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { RabbitMQService } from '../messaging/rabbitmq.service';
 import { UploadMediaDto } from './dto/upload-media.dto';
 import { MediaFile } from '@prisma/client';
-import * as AWS from 'aws-sdk';
-import { RabbitMQService } from '../messaging/rabbitmq.service';
+import { S3Client } from '@aws-sdk/client-s3';
 
 interface MediaUploadJob {
   jobId: string;
@@ -14,19 +14,21 @@ interface MediaUploadJob {
 @Injectable()
 export class MediaService {
   private readonly logger = new Logger(MediaService.name);
-  private s3: AWS.S3;
+  private s3: S3Client;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly rabbitMQService: RabbitMQService,
   ) {
-    // Configure AWS SDK
-    AWS.config.update({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    this.s3 = new S3Client({
       region: process.env.AWS_REGION,
+      endpoint: process.env.S3_ENDPOINT,
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
     });
-    this.s3 = new AWS.S3();
   }
 
   async uploadMedia(incidentId: string, dto: UploadMediaDto): Promise<MediaFile> {

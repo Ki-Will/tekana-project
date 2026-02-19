@@ -5,11 +5,14 @@ import { PathGuardController } from './path-guard.controller.js';
 import { PrismaModule } from '../prisma/prisma.module';
 import { IncidentsModule } from '../incidents/incidents.module';
 import { MessagingModule } from '../messaging/messaging.module';
+import { IncidentsService } from '../incidents/incidents.service';
+import { AuditService } from '../audit/audit.service';
+import { EmailService } from '../email/email.service';
 
 @Module({
   imports: [ConfigModule, PrismaModule, IncidentsModule, MessagingModule],
   controllers: [PathGuardController],
-  providers: [PathGuardService],
+  providers: [PathGuardService, IncidentsService , AuditService , EmailService],
   exports: [PathGuardService],
 })
 export class PathGuardModule {}

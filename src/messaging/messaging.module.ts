@@ -7,6 +7,6 @@ import { SmsModule } from '../sms/sms.module';
 @Module({
   imports: [ConfigModule, SmsModule],
   providers: [RabbitMQService, FcmService],
-  exports: [RabbitMQService, FcmService],
+  exports: [RabbitMQService, FcmService, SmsModule],
 })
 export class MessagingModule {}

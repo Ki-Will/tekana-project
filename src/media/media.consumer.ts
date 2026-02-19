@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UploadMediaDto } from './dto/upload-media.dto';
-import * as AWS from 'aws-sdk';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import * as amqp from 'amqplib';
 
 interface MediaUploadJob {
@@ -13,16 +13,18 @@ interface MediaUploadJob {
 @Injectable()
 export class MediaConsumerService implements OnModuleInit {
   private readonly logger = new Logger(MediaConsumerService.name);
-  private s3: AWS.S3;
+  private s3: S3Client;
 
   constructor(private readonly prisma: PrismaService) {
-    // Configure AWS SDK
-    AWS.config.update({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    this.s3 = new S3Client({
       region: process.env.AWS_REGION,
+      endpoint: process.env.S3_ENDPOINT,
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+      },
     });
-    this.s3 = new AWS.S3();
   }
 
   async onModuleInit() {
@@ -81,8 +83,9 @@ export class MediaConsumerService implements OnModuleInit {
       ContentType: this.getContentType(dto.type),
     };
 
-    const result = await this.s3.upload(uploadParams).promise();
-    const fileUrl = result.Location;
+    const command = new PutObjectCommand(uploadParams);
+    const result = await this.s3.send(command);
+    const fileUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
 
     this.logger.log(`Media uploaded to S3: ${fileUrl}`);
 
