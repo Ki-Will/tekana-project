@@ -14,6 +14,7 @@ import { RespondersModule } from './responders/responders.module';
 import { DeviceTokensModule } from './device-tokens/device-tokens.module';
 import { MediaModule } from './media/media.module';
 import { AuditModule } from './audit/audit.module';
+import { StreamingModule } from './streaming/streaming.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AuditModule } from './audit/audit.module';
     DeviceTokensModule,
     MediaModule,
     AuditModule,
+    StreamingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
