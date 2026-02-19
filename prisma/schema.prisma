@@ -208,6 +208,7 @@ model ResponderProfile {
   averageResponseTime Float?      // in minutes
   rating           Float?         // 1-5 scale
   skills           String[]       // e.g., ["first_aid", "self_defense"]
+  specialization   ResponderSpecialization
   certifications   String[]       // e.g., ["cpr", "security_training"]
   isVerified       Boolean        @default(false)
   verificationDocument String?    // Path to verification doc
@@ -291,6 +292,13 @@ enum DangerType {
   TRAFFIC_HAZARD
   KNOWN_HANGOUT_SPOT
   OTHER
+}
+
+// Specialization enum
+enum ResponderSpecialization {
+  EMERGENCY_RESPONSE
+  FIRE_FIGHTING
+  MEDICAL
 }
 
 // Notification system
