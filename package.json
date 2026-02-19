@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -37,7 +37,7 @@
     "amqplib": "^0.10.3",
     "ioredis": "^5.4.2",
     "firebase-admin": "^11.11.1",
-    "aws-sdk": "^2.1500.0",
+    "@aws-sdk/client-s3": "^3.665.0",
     "nodemailer": "^6.9.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
@@ -97,5 +97,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "npx ts-node prisma/seed.ts"
   }
 }
