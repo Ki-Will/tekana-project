@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { RabbitMQService } from '../messaging/rabbitmq.service';
 import { StreamEventJob } from './streaming.service';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -87,6 +87,14 @@ export class StreamingConsumerService implements OnModuleInit {
     const bucketName = this.configService.get<string>('S3_BUCKET_NAME') || 'tekana-media';
     const key = `streams/${latestFile}`;
 
+    // Ensure bucket exists
+    try {
+      await this.s3Client.send(new CreateBucketCommand({ Bucket: bucketName }));
+      this.logger.log(`Bucket ${bucketName} created or already exists`);
+    } catch (error: any) {
+      this.logger.warn(`Bucket creation failed, but proceeding: ${error.message}`);
+    }
+
     try {
       await this.s3Client.send(new PutObjectCommand({
         Bucket: bucketName,
@@ -97,8 +105,8 @@ export class StreamingConsumerService implements OnModuleInit {
       this.logger.log(`Uploaded recorded file ${latestFile} to MinIO`);
       // Optionally, delete the local file after upload
       fs.unlinkSync(filePath);
-    } catch (error) {
-      this.logger.error(`Failed to upload recorded file ${latestFile}`, error);
+    } catch (error: any) {
+      this.logger.error(`Failed to upload recorded file ${latestFile}`, error.message);
     }
   }
 }
