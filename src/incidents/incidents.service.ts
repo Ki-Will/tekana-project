@@ -21,6 +21,7 @@ import { FcmService } from '../messaging/fcm.service';
 import { SmsService } from '../sms/sms.service';
 import { AuditService } from '../audit/audit.service';
 import { EmailService } from '../email/email.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class IncidentsService {
@@ -59,6 +60,7 @@ export class IncidentsService {
         locationAddress: dto.locationAddress,
         isSilentSOS: dto.isSilentSOS ?? undefined,
         isOfflineAlert: dto.isOfflineAlert ?? undefined,
+        streamKey: uuidv4(),
       },
       include: this.defaultIncidentInclude(),
     });
