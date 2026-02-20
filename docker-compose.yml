@@ -68,13 +68,13 @@ services:
     image: tiangolo/nginx-rtmp
     container_name: tekana_rtmp
     ports:
-      - "1935:1935"
+      - "1920:1920"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - rtmp_recordings:/tmp/recordings
+      - ./recordings:/tmp/recordings
+    user: "0:0"
     depends_on:
       - minio
-      - app
     profiles: ["development", "production"]
 
 volumes:
