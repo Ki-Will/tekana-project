@@ -82,6 +82,7 @@ model Incident {
   resolvedAt      DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+  streamKey       String?       @unique
 
   // Relations
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
