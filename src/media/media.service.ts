@@ -1,14 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { RabbitMQService } from '../messaging/rabbitmq.service';
 import { UploadMediaDto } from './dto/upload-media.dto';
-import { MediaFile } from '@prisma/client';
+import { MediaFile, MediaType } from '@prisma/client';
 import { S3Client } from '@aws-sdk/client-s3';
 
 interface MediaUploadJob {
   jobId: string;
   incidentId: string;
-  dto: UploadMediaDto;
+  fileBufferBase64: string;
+  fileSize: number;
+  type: MediaType;
+  fileName: string;
+  duration?: string;
 }
 
 @Injectable()
@@ -31,7 +35,11 @@ export class MediaService {
     });
   }
 
-  async uploadMedia(incidentId: string, dto: UploadMediaDto): Promise<MediaFile> {
+  async uploadMedia(incidentId: string, dto: UploadMediaDto, file: any): Promise<MediaFile> {
+    if (!file || !file.buffer) {
+      throw new BadRequestException('File is required');
+    }
+
     this.logger.log(`Publishing media upload job for incident ${incidentId}: ${dto.type}`);
 
     // Generate unique job ID
@@ -43,8 +51,8 @@ export class MediaService {
         incidentId,
         type: dto.type,
         filePath: `job:${jobId}`, // Placeholder, will be updated by consumer
-        fileName: dto.fileName || 'media',
-        fileSize: dto.fileData ? Buffer.byteLength(dto.fileData, 'base64') : 0,
+        fileName: dto.fileName || file.originalname,
+        fileSize: file.size,
         duration: dto.duration ? parseInt(dto.duration) : undefined,
         isEncrypted: false,
         encryptionKey: null,
@@ -52,7 +60,15 @@ export class MediaService {
     });
 
     // Publish job to RabbitMQ
-    const job: MediaUploadJob = { jobId, incidentId, dto };
+    const job: MediaUploadJob = {
+      jobId,
+      incidentId,
+      fileBufferBase64: file.buffer.toString('base64'),
+      fileSize: file.size,
+      type: dto.type,
+      fileName: dto.fileName || file.originalname,
+      duration: dto.duration,
+    };
     await this.rabbitMQService.publish('media.upload', job);
 
     this.logger.log(`Media upload job published: ${jobId}`);
