@@ -1,13 +1,19 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UploadMediaDto } from './dto/upload-media.dto';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
 import * as amqp from 'amqplib';
+import { Readable } from 'stream';
+import { MediaType } from '@prisma/client';
 
 interface MediaUploadJob {
   jobId: string;
   incidentId: string;
-  dto: UploadMediaDto;
+  fileBufferBase64: string;
+  fileSize: number;
+  type: MediaType;
+  fileName: string;
+  duration?: string;
 }
 
 @Injectable()
@@ -35,9 +41,12 @@ export class MediaConsumerService implements OnModuleInit {
     try {
       const connection = await amqp.connect(process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672');
       const channel = await connection.createChannel();
+      const exchange = 'tekana.events';
       const queue = 'media.upload';
 
+      await channel.assertExchange(exchange, 'topic', { durable: true });
       await channel.assertQueue(queue, { durable: true });
+      await channel.bindQueue(queue, exchange, 'media.upload');
       await channel.prefetch(1); // Process one job at a time
 
       this.logger.log('Media upload consumer started');
@@ -45,7 +54,8 @@ export class MediaConsumerService implements OnModuleInit {
       channel.consume(queue, async (msg) => {
         if (msg) {
           try {
-            const job: MediaUploadJob = JSON.parse(msg.content.toString());
+            const data = JSON.parse(msg.content.toString());
+            const job: MediaUploadJob = data.payload;
             await this.processUploadJob(job);
             channel.ack(msg);
           } catch (error) {
@@ -60,32 +70,34 @@ export class MediaConsumerService implements OnModuleInit {
   }
 
   private async processUploadJob(job: MediaUploadJob) {
-    const { jobId, incidentId, dto } = job;
+    const { jobId, incidentId, fileBufferBase64, fileSize, type, fileName, duration } = job;
 
     this.logger.log(`Processing media upload job: ${jobId}`);
 
-    if (!dto.fileData) {
-      throw new Error('File data is required');
+    const bucketName = process.env.S3_BUCKET_NAME!;
+    try {
+      await this.s3.send(new CreateBucketCommand({ Bucket: bucketName }));
+    } catch (error) {
+      this.logger.log(`Bucket ${bucketName} already exists or error: ${(error as Error).message}`);
     }
 
-    // Convert base64 to buffer
-    const fileBuffer = Buffer.from(dto.fileData, 'base64');
-    const fileSize = fileBuffer.length;
+    const fileBuffer = Buffer.from(fileBufferBase64, 'base64');
 
     // Generate unique key for S3
-    const fileKey = `incidents/${incidentId}/${Date.now()}-${dto.fileName || 'media'}`;
+    const fileKey = `incidents/${incidentId}/${Date.now()}-${fileName || 'media'}`;
 
     // Upload to S3
     const uploadParams = {
       Bucket: process.env.S3_BUCKET_NAME!,
       Key: fileKey,
-      Body: fileBuffer,
-      ContentType: this.getContentType(dto.type),
+      Body: Readable.from(fileBuffer),
+      ContentLength: fileBuffer.length,
+      ContentType: this.getContentType(type),
     };
 
     const command = new PutObjectCommand(uploadParams);
     const result = await this.s3.send(command);
-    const fileUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
+    const fileUrl = `${process.env.S3_ENDPOINT}/${process.env.S3_BUCKET_NAME}/${fileKey}`;
 
     this.logger.log(`Media uploaded to S3: ${fileUrl}`);
 
