@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Request, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { MediaService } from './media.service';
 import { UploadMediaDto } from './dto/upload-media.dto';
@@ -11,11 +12,13 @@ import { UploadMediaDto } from './dto/upload-media.dto';
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
   @Post('upload/:incidentId')
   @ApiOperation({ summary: 'Upload media file for an incident' })
   @ApiResponse({ status: 201, description: 'Media uploaded successfully' })
-  async uploadMedia(@Request() req, @Param('incidentId') incidentId: string, @Body() dto: UploadMediaDto) {
-    return this.mediaService.uploadMedia(incidentId, dto);
+  async uploadMedia(@UploadedFile() file: any, @Param('incidentId') incidentId: string, @Body() dto: UploadMediaDto) {
+    return this.mediaService.uploadMedia(incidentId, dto, file);
   }
 
   @Get(':id')
