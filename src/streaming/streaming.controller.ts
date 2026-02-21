@@ -11,11 +11,8 @@ export class StreamingController {
   async onPublish(@Body() body: any): Promise<void> {
     this.logger.log(`Stream publish: ${JSON.stringify(body)}`);
     const job: StreamEventJob = {
-      action: 'publish',
       streamKey: body.name,
-      app: body.app,
-      name: body.name,
-      clientId: body.clientid,
+      event: 'publish',
     };
     await this.streamingService.publishStreamEvent(job);
   }
@@ -24,11 +21,8 @@ export class StreamingController {
   async onPublishDone(@Body() body: any): Promise<void> {
     this.logger.log(`Stream publish done: ${JSON.stringify(body)}`);
     const job: StreamEventJob = {
-      action: 'publish_done',
       streamKey: body.name,
-      app: body.app,
-      name: body.name,
-      clientId: body.clientid,
+      event: 'publish_done',
     };
     await this.streamingService.publishStreamEvent(job);
   }
@@ -37,11 +31,8 @@ export class StreamingController {
   async onPlay(@Body() body: any): Promise<void> {
     this.logger.log(`Stream play: ${JSON.stringify(body)}`);
     const job: StreamEventJob = {
-      action: 'play',
       streamKey: body.name,
-      app: body.app,
-      name: body.name,
-      clientId: body.clientid,
+      event: 'play',
     };
     await this.streamingService.publishStreamEvent(job);
   }
@@ -50,11 +41,8 @@ export class StreamingController {
   async onPlayDone(@Body() body: any): Promise<void> {
     this.logger.log(`Stream play done: ${JSON.stringify(body)}`);
     const job: StreamEventJob = {
-      action: 'play_done',
       streamKey: body.name,
-      app: body.app,
-      name: body.name,
-      clientId: body.clientid,
+      event: 'play_done',
     };
     await this.streamingService.publishStreamEvent(job);
   }
