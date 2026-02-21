@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as amqp from 'amqplib';
+import { Readable } from 'stream';
 
 @Injectable()
 export class StreamingConsumerService implements OnModuleInit {
@@ -35,9 +36,12 @@ export class StreamingConsumerService implements OnModuleInit {
     try {
       const connection = await amqp.connect(this.configService.get<string>('RABBITMQ_URL') || 'amqp://guest:guest@localhost:5672');
       const channel = await connection.createChannel();
+      const exchange = 'tekana.events';
       const queue = 'streaming_events';
 
+      await channel.assertExchange(exchange, 'topic', { durable: true });
       await channel.assertQueue(queue, { durable: true });
+      await channel.bindQueue(queue, exchange, 'streaming.events');
       await channel.prefetch(1); // Process one job at a time
 
       this.logger.log('Streaming events consumer started');
@@ -61,9 +65,9 @@ export class StreamingConsumerService implements OnModuleInit {
   }
 
   private async handleStreamEvent(job: StreamEventJob): Promise<void> {
-    this.logger.log(`Handling stream event: ${job.action} for ${job.streamKey}`);
+    this.logger.log(`Handling stream event: ${job.event} for ${job.streamKey}`);
 
-    if (job.action === 'publish_done') {
+    if (job.event === 'publish_done') {
       await this.uploadRecordedFile(job.streamKey);
     }
 
@@ -99,7 +103,8 @@ export class StreamingConsumerService implements OnModuleInit {
       await this.s3Client.send(new PutObjectCommand({
         Bucket: bucketName,
         Key: key,
-        Body: fileContent,
+        Body: Readable.from(fileContent),
+        ContentLength: fileContent.length,
         ContentType: 'video/x-flv',
       }));
       this.logger.log(`Uploaded recorded file ${latestFile} to MinIO`);
