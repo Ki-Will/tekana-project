@@ -29,6 +29,13 @@ export class StreamingConsumerService implements OnModuleInit {
   }
 
   async onModuleInit(): Promise<void> {
+    const bucketName = this.configService.get<string>('S3_BUCKET_NAME') || 'tekana-media';
+    try {
+      await this.s3Client.send(new CreateBucketCommand({ Bucket: bucketName }));
+      this.logger.log(`Bucket ${bucketName} created or already exists`);
+    } catch (error: any) {
+      this.logger.warn(`Bucket creation failed: ${error.message}`);
+    }
     this.startConsumer();
   }
 
@@ -48,6 +55,7 @@ export class StreamingConsumerService implements OnModuleInit {
 
       channel.consume(queue, async (msg) => {
         if (msg) {
+          console.log('Received streaming event message');
           try {
             const message = JSON.parse(msg.content.toString());
             const job: StreamEventJob = message.payload;
@@ -75,11 +83,13 @@ export class StreamingConsumerService implements OnModuleInit {
   }
 
   private async uploadRecordedFile(streamKey: string): Promise<void> {
-    const recordingsDir = '/tmp/recordings';
+    const recordingsDir = './recordings';
+    console.log(`Recordings dir: ${recordingsDir}, exists: ${fs.existsSync(recordingsDir)}`);
     const files = fs.readdirSync(recordingsDir).filter(file => file.startsWith(streamKey));
+    console.log(`Files in recordings for ${streamKey}: ${files.join(', ')}`);
 
     if (files.length === 0) {
-      this.logger.warn(`No recorded file found for stream ${streamKey}`);
+      console.log(`No recorded file found for stream ${streamKey}`);
       return;
     }
 
@@ -87,17 +97,10 @@ export class StreamingConsumerService implements OnModuleInit {
     const latestFile = files.sort().pop()!;
     const filePath = path.join(recordingsDir, latestFile);
     const fileContent = fs.readFileSync(filePath);
+    console.log(`Uploading file ${latestFile} for stream ${streamKey}`);
 
     const bucketName = this.configService.get<string>('S3_BUCKET_NAME') || 'tekana-media';
     const key = `streams/${latestFile}`;
-
-    // Ensure bucket exists
-    try {
-      await this.s3Client.send(new CreateBucketCommand({ Bucket: bucketName }));
-      this.logger.log(`Bucket ${bucketName} created or already exists`);
-    } catch (error: any) {
-      this.logger.warn(`Bucket creation failed, but proceeding: ${error.message}`);
-    }
 
     try {
       await this.s3Client.send(new PutObjectCommand({
@@ -108,6 +111,7 @@ export class StreamingConsumerService implements OnModuleInit {
         ContentType: 'video/x-flv',
       }));
       this.logger.log(`Uploaded recorded file ${latestFile} to MinIO`);
+      console.log(`Uploaded and deleted ${latestFile} for stream ${streamKey}`);
       // Optionally, delete the local file after upload
       fs.unlinkSync(filePath);
     } catch (error: any) {
