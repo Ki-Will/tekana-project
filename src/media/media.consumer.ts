@@ -33,7 +33,14 @@ export class MediaConsumerService implements OnModuleInit {
     });
   }
 
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
+    const bucketName = process.env.S3_BUCKET_NAME!;
+    try {
+      await this.s3.send(new CreateBucketCommand({ Bucket: bucketName }));
+      this.logger.log(`Bucket ${bucketName} created or already exists`);
+    } catch (error: any) {
+      this.logger.warn(`Bucket creation failed: ${error.message}`);
+    }
     this.startConsumer();
   }
 
@@ -75,12 +82,6 @@ export class MediaConsumerService implements OnModuleInit {
     this.logger.log(`Processing media upload job: ${jobId}`);
 
     const bucketName = process.env.S3_BUCKET_NAME!;
-    try {
-      await this.s3.send(new CreateBucketCommand({ Bucket: bucketName }));
-    } catch (error) {
-      this.logger.log(`Bucket ${bucketName} already exists or error: ${(error as Error).message}`);
-    }
-
     const fileBuffer = Buffer.from(fileBufferBase64, 'base64');
 
     // Generate unique key for S3
