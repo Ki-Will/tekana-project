@@ -17,6 +17,6 @@ export class StreamingService {
 
   async publishStreamEvent(job: StreamEventJob): Promise<void> {
     this.logger.log(`Publishing stream event: ${job.name} for stream ${job.streamKey}`);
-    await this.rabbitMQService.publish('streaming_events', job);
+    await this.rabbitMQService.publish('streaming.events', job);
   }
 }

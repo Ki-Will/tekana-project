@@ -77,7 +77,7 @@ Tekana is a mobile-first safety and rescue platform designed to provide instant 
    FCM_SERVER_KEY="your-fcm-server-key"
 
    # Port
-   PORT=3000
+   PORT=3086
 
    # RabbitMQ (optional, defaults provided)
    RABBITMQ_URL="amqp://guest:guest@localhost:5672"
@@ -127,8 +127,8 @@ docker-compose --profile production up -d
 
 ### Access Points
 
-- **API**: http://localhost:3000/api
-- **Health Check**: http://localhost:3000/api/health
+- **API**: http://localhost:3086/api
+- **Health Check**: http://localhost:3086/api/health
 - **RabbitMQ Management**: http://localhost:15672 (guest/guest)
 - **MinIO Console**: http://localhost:9001 (minioadmin/minioadmin)
 - **RTMP Stream**: rtmp://localhost:1935/live
@@ -146,8 +146,9 @@ docker-compose --profile production up -d
 - `GET /api/incidents/:id` - Get incident details
 
 ### Media
-- `POST /api/media/upload` - Upload media (async)
+- `POST /api/media/upload/:incidentId` - Upload media file (multipart/form-data, async processing)
 - `GET /api/media/:id` - Get media
+- `GET /api/media/incident/:incidentId` - Get media for incident
 
 ### Streaming
 - `POST /api/streaming/publish` - RTMP publish hook
@@ -161,23 +162,28 @@ docker-compose --profile production up -d
 
 ## 📹 Live Streaming
 
-Tekana supports RTMP live streaming with automatic recording to MinIO.
+Tekana supports RTMP live streaming with automatic recording and upload to MinIO.
 
 ### Streaming Setup
 
-1. **Publish Stream:**
-   ```bash
-   ffmpeg -f avfoundation -i "0:0" -f flv rtmp://localhost:1935/live/your-stream-key
-   ```
+1. **Get Stream Key:**
+   When creating an incident via `POST /api/incidents`, the response includes a unique `streamKey` (UUID).
 
-2. **Play Stream:**
-   Use any RTMP player or VLC:
-   ```
-   rtmp://localhost:1935/live/your-stream-key
-   ```
+2. **Publish Stream with OBS Studio:**
+   - Open OBS Studio
+   - In Settings > Stream, select Custom
+   - Server: `rtmp://localhost:1935/live`
+   - Stream Key: `{streamKey}` (from incident response)
+   - Start streaming
 
-3. **Recorded Streams:**
-   Streams are automatically recorded and uploaded to MinIO at `streams/your-stream-key.flv`
+3. **Stop Streaming:**
+   Stop the stream in OBS. The recording is automatically saved locally to `./recordings` and uploaded to MinIO at `streams/{streamKey}-{timestamp}.flv`.
+
+4. **Play Stream (if needed):**
+   Use VLC or any RTMP player:
+   ```
+   rtmp://localhost:1935/live/{streamKey}
+   ```
 
 ## 🧪 Testing
 
