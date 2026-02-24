@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateDangerZoneDto } from './dto/create-danger-zone.dto';
 import { DangerZoneReport, Prisma } from '@prisma/client';
 import { FcmService } from '../messaging/fcm.service';
+import { RedisService } from '../redis/redis.service';
 
 @Injectable()
 export class DangerZonesService {
@@ -11,6 +12,7 @@ export class DangerZonesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly fcmService: FcmService,
+    private readonly redisService: RedisService,
   ) {}
 
   async create(userId: string, dto: CreateDangerZoneDto): Promise<DangerZoneReport> {
@@ -28,6 +30,9 @@ export class DangerZonesService {
 
     // Optional: Notify nearby users or authorities about new danger zone
     this.logger.log(`Danger zone reported by user ${userId} at (${dto.locationLat}, ${dto.locationLng})`);
+
+    // Invalidate cache
+    await this.redisService.del('danger_zones:aggregated');
 
     return dangerZone;
   }
@@ -86,6 +91,9 @@ export class DangerZonesService {
       data: updateData,
     });
 
+    // Invalidate cache
+    await this.redisService.del('danger_zones:aggregated');
+
     return dangerZone;
   }
 
@@ -93,9 +101,16 @@ export class DangerZonesService {
     await this.prisma.dangerZoneReport.delete({
       where: { id },
     });
+
+    // Invalidate cache
+    await this.redisService.del('danger_zones:aggregated');
   }
 
   async getAggregatedZones(): Promise<any> {
+    const cacheKey = 'danger_zones:aggregated';
+    const cached = await this.redisService.get(cacheKey);
+    if (cached) return cached;
+
     // Placeholder for aggregated danger zones (e.g., heatmaps)
     // Could use PostGIS or similar for spatial aggregation
     const zones = await this.prisma.dangerZoneReport.findMany({
@@ -109,6 +124,7 @@ export class DangerZonesService {
       },
     });
 
+    await this.redisService.set(cacheKey, zones, 600); // 10 minutes TTL
     return zones;
   }
 }
