@@ -44,7 +44,7 @@ export class StreamingConsumerService implements OnModuleInit {
       const connection = await amqp.connect(this.configService.get<string>('RABBITMQ_URL') || 'amqp://guest:guest@localhost:5672');
       const channel = await connection.createChannel();
       const exchange = 'tekana.events';
-      const queue = 'streaming_events';
+      const queue = 'streaming.events';
 
       await channel.assertExchange(exchange, 'topic', { durable: true });
       await channel.assertQueue(queue, { durable: true });
