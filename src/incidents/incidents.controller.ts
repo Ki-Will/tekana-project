@@ -18,6 +18,7 @@ import { CreateIncidentDto } from './dto/create-incident.dto';
 import { UpdateIncidentStatusDto } from './dto/update-incident-status.dto';
 import { AssignResponderDto } from './dto/assign-responder.dto';
 import { FilterIncidentsDto } from './dto/filter-incidents.dto';
+import { RateLimitGuard } from '../common/guards/rate-limit.guard';
 
 @ApiTags('Incidents')
 @ApiBearerAuth()
@@ -27,6 +28,7 @@ export class IncidentsController {
   constructor(private readonly incidentsService: IncidentsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RateLimitGuard)
   @ApiOperation({ summary: 'Create a new incident (SOS alert)' })
   @ApiResponse({ status: 201, description: 'Incident created successfully' })
   async create(@Request() req, @Body() createIncidentDto: CreateIncidentDto) {
