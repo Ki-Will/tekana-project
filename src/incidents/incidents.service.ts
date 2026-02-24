@@ -103,6 +103,20 @@ export class IncidentsService {
       data: notifications,
     });
 
+    // Send SMS to trusted contacts
+    const userWithTrusted = await this.prisma.user.findUnique({
+      where: { id: incident.userId },
+      include: { trustedContacts: true },
+    });
+    if (userWithTrusted?.trustedContacts.length) {
+      for (const contact of userWithTrusted.trustedContacts) {
+        await this.smsService.sendSms(
+          contact.contactPhone,
+          `Emergency Alert: Incident reported by ${userWithTrusted.name}. Please check for updates.`,
+        );
+      }
+    }
+
     for (const notification of notifications) {
       await this.dispatchNotification({
         userId: notification.userId,
