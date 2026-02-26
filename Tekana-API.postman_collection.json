@@ -260,6 +260,31 @@
 							"path": ["incidents", "{{incident_id}}", "media-files"]
 						}
 					}
+				},
+				{
+					"name": "Request Emergency Service",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"ambulance\",\n  \"notes\": \"Emergency medical assistance needed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/incidents/{{incident_id}}/request-emergency-service",
+							"host": ["{{base_url}}"],
+							"path": ["incidents", "{{incident_id}}", "request-emergency-service"]
+						}
+					}
 				}
 			]
 		},
@@ -673,6 +698,31 @@
 							"raw": "{{base_url}}/responders/nearby-incidents",
 							"host": ["{{base_url}}"],
 							"path": ["responders", "nearby-incidents"]
+						}
+					}
+				},
+				{
+					"name": "Resolve Incident",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Incident resolved successfully\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/responders/incidents/{{incident_id}}/resolve",
+							"host": ["{{base_url}}"],
+							"path": ["responders", "incidents", "{{incident_id}}", "resolve"]
 						}
 					}
 				}
