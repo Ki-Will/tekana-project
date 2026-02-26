@@ -10,11 +10,13 @@ import {
   ResponderActionType,
   ActionStatus,
   UserRole,
+  Severity,
 } from '@prisma/client';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { UpdateIncidentStatusDto } from './dto/update-incident-status.dto';
 import { AssignResponderDto } from './dto/assign-responder.dto';
 import { FilterIncidentsDto } from './dto/filter-incidents.dto';
+import { RequestEmergencyServiceDto } from './dto/request-emergency-service.dto';
 import { RabbitMQService } from '../messaging/rabbitmq.service';
 import { RedisService } from '../redis/redis.service';
 import { FcmService } from '../messaging/fcm.service';
@@ -68,6 +70,9 @@ export class IncidentsService {
     if (process.env.NODE_ENV === 'development') {
       console.log(`[DEV] Incident received and created: ${incident.id} by user ${userId}`);
     }
+
+    // Auto-assign nearby available responders
+    await this.autoAssignResponders(incident);
 
     await this.cacheIncident(incident);
     await this.invalidateIncidentLists();
@@ -539,5 +544,154 @@ export class IncidentsService {
 
   private async invalidateIncidentLists() {
     await this.redisService.flushByPattern('incidents:list:*');
+  }
+
+  private async autoAssignResponders(incident: Incident) {
+    // Calculate search radius based on severity
+    let radius = 5000; // Default 5km
+    switch (incident.severity) {
+      case Severity.CRITICAL:
+        radius = 10000; // 10km for critical incidents
+        break;
+      case Severity.HIGH:
+        radius = 7500; // 7.5km for high severity
+        break;
+      case Severity.MEDIUM:
+        radius = 5000; // 5km for medium
+        break;
+      case Severity.LOW:
+        radius = 3000; // 3km for low severity
+        break;
+    }
+
+    const nearbyResponders = await this.findNearbyAvailableResponders(incident.locationLat, incident.locationLng, radius);
+
+    if (nearbyResponders.length > 0) {
+      // Update incident status to dispatched
+      await this.prisma.incident.update({
+        where: { id: incident.id },
+        data: { status: IncidentStatus.RESPONDERS_DISPATCHED },
+      });
+
+      for (const responder of nearbyResponders) {
+        // Check if responder already has active assignments
+        const activeActions = await this.prisma.responderAction.findMany({
+          where: {
+            responderId: responder.id,
+            status: { in: [ActionStatus.PENDING, ActionStatus.IN_PROGRESS] }
+          }
+        });
+
+        if (activeActions.length > 0) {
+          this.logger.log(`Skipping responder ${responder.userId} - already has active assignments`);
+          continue;
+        }
+
+        const action = await this.prisma.responderAction.create({
+          data: {
+            incidentId: incident.id,
+            responderId: responder.id,
+            actionType: ResponderActionType.DISPATCHED,
+            status: ActionStatus.IN_PROGRESS,
+          },
+        });
+
+        // Send notification to responder
+        const notification = {
+          userId: responder.userId,
+          incidentId: incident.id,
+          type: NotificationType.RESPONDER_DISPATCHED,
+          title: 'New incident assigned',
+          message: `You have been assigned to incident ${incident.id} at ${incident.locationAddress || 'unknown location'}`,
+          channels: [NotificationChannel.PUSH_NOTIFICATION, NotificationChannel.IN_APP] as NotificationChannel[],
+        };
+
+        await this.prisma.notification.create({
+          data: notification,
+        });
+
+        await this.dispatchNotification({
+          ...notification,
+          incidentId: notification.incidentId ?? undefined,
+          data: {
+            responderActionId: action.id,
+            incidentId: incident.id,
+          },
+        });
+
+        this.logger.log(`Auto-assigned responder ${responder.userId} to incident ${incident.id}`);
+      }
+    }
+  }
+
+  private async findNearbyAvailableResponders(lat: number, lng: number, radius: number = 5000): Promise<any[]> {
+    const responders = await this.prisma.responderProfile.findMany({
+      where: {
+        isAvailable: true,
+        isVerified: true,
+        user: {
+          isActive: true,
+          role: { in: ['COMMUNITY_RESPONDER', 'POLICE_OFFICER', 'MEDICAL_RESPONDER', 'FIRE_RESPONDER'] },
+        },
+      },
+      include: {
+        user: { select: { id: true } },
+      },
+    });
+
+    const nearby = responders.filter(responder => {
+      if (!responder.currentLocationLat || !responder.currentLocationLng) return false;
+      const distance = this.haversineDistance(lat, lng, responder.currentLocationLat, responder.currentLocationLng);
+      return distance <= radius;
+    });
+
+    return nearby;
+  }
+
+  private haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Earth's radius in km
+    const dLat = this.toRadians(lat2 - lat1);
+    const dLon = this.toRadians(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c * 1000; // Return in meters
+  }
+
+  private toRadians(value: number): number {
+    return (value * Math.PI) / 180;
+  }
+
+  async requestEmergencyService(incidentId: string, dto: RequestEmergencyServiceDto, userId: string) {
+    const incident = await this.getIncidentById(incidentId);
+
+    // Determine emergency service phone number
+    const phoneNumber = dto.type === 'ambulance'
+      ? process.env.EMERGENCY_AMBULANCE_PHONE || '112' // Default to emergency number
+      : process.env.EMERGENCY_POLICE_PHONE || '911'; // Default to emergency number
+
+    const message = `Emergency ${dto.type} request for incident ${incident.id} at ${incident.locationAddress || 'location unknown'}. Notes: ${dto.notes || 'None'}. Requested by user ${userId}.`;
+
+    this.logger.log(`Emergency ${dto.type} request prepared for incident ${incidentId} by user ${userId}`);
+
+    // Create a notification for the incident user
+    await this.prisma.notification.create({
+      data: {
+        userId: incident.userId,
+        incidentId: incident.id,
+        type: NotificationType.SYSTEM_ANNOUNCEMENT,
+        title: `Emergency ${dto.type} request prepared`,
+        message: `An emergency ${dto.type} call is being forwarded.`,
+        channels: [NotificationChannel.IN_APP],
+      },
+    });
+
+    // Return data for frontend to handle the call forwarding
+    return {
+      phoneNumber,
+      message,
+      type: dto.type,
+    };
   }
 }
