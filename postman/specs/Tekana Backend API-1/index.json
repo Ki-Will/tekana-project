@@ -1,0 +1,2330 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "AppController_healthCheck",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        },
+        "summary": "Register a new user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        },
+        "summary": "Login user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/send-otp": {
+      "post": {
+        "operationId": "AuthController_sendOtp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Send OTP to phone number",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/verify-otp": {
+      "post": {
+        "operationId": "AuthController_verifyOtp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid OTP"
+          }
+        },
+        "summary": "Verify OTP and login",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refreshToken",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Token refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Refresh JWT token",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Logout user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/profile": {
+      "get": {
+        "operationId": "AuthController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/users": {
+      "post": {
+        "operationId": "UsersController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "operationId": "UsersController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "CITIZEN",
+                "COMMUNITY_RESPONDER",
+                "POLICE_OFFICER",
+                "ADMIN",
+                "SUPER_ADMIN",
+                "EMERGENCY_DISPATCHER",
+                "MEDICAL_RESPONDER",
+                "FIRE_RESPONDER"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all users with pagination",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/responders": {
+      "get": {
+        "operationId": "UsersController_getActiveResponders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responders retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all active community responders",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/search": {
+      "get": {
+        "operationId": "UsersController_searchUsers",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "description": "Search query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Search users by name, phone, or email",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/role/{role}": {
+      "get": {
+        "operationId": "UsersController_getUsersByRole",
+        "parameters": [
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get users by role",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "operationId": "UsersController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user by ID",
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update user information",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/deactivate": {
+      "patch": {
+        "operationId": "UsersController_deactivateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deactivated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Deactivate user account",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/activate": {
+      "patch": {
+        "operationId": "UsersController_activateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User activated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Activate user account",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/role": {
+      "patch": {
+        "operationId": "UsersController_updateUserRole",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User role updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update user role",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/trusted-contacts": {
+      "post": {
+        "operationId": "UsersController_addTrustedContact",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTrustedContactDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Trusted contact added successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add trusted contact for user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "operationId": "UsersController_getTrustedContacts",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trusted contacts retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user trusted contacts",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/trusted-contacts/{contactId}": {
+      "delete": {
+        "operationId": "UsersController_removeTrustedContact",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contactId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trusted contact removed successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove trusted contact",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/incidents": {
+      "post": {
+        "operationId": "IncidentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIncidentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Incident created successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new incident (SOS alert)",
+        "tags": [
+          "Incidents"
+        ]
+      },
+      "get": {
+        "operationId": "IncidentsController_findAll",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by incident status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "RESPONDERS_DISPATCHED",
+                "IN_PROGRESS",
+                "RESOLVED",
+                "FALSE_ALARM",
+                "CANCELLED"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Filter by incident type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "THEFT",
+                "ASSAULT",
+                "MEDICAL_EMERGENCY",
+                "ACCIDENT",
+                "FIRE",
+                "SUSPICIOUS_ACTIVITY",
+                "HARASSMENT",
+                "KIDNAPPING",
+                "OTHER"
+              ]
+            }
+          },
+          {
+            "name": "severity",
+            "required": false,
+            "in": "query",
+            "description": "Filter by severity",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+              ]
+            }
+          },
+          {
+            "name": "isSilentSOS",
+            "required": false,
+            "in": "query",
+            "description": "Filter to silent SOS incidents",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isOfflineAlert",
+            "required": false,
+            "in": "query",
+            "description": "Filter to offline alerts",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by user ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responderId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by responder ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Incidents retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retrieve incidents with optional filters",
+        "tags": [
+          "Incidents"
+        ]
+      }
+    },
+    "/api/incidents/{id}": {
+      "get": {
+        "operationId": "IncidentsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Incident retrieved successfully"
+          },
+          "404": {
+            "description": "Incident not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get incident details by ID",
+        "tags": [
+          "Incidents"
+        ]
+      }
+    },
+    "/api/incidents/{id}/status": {
+      "patch": {
+        "operationId": "IncidentsController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIncidentStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Incident status updated successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update incident status and severity",
+        "tags": [
+          "Incidents"
+        ]
+      }
+    },
+    "/api/incidents/{id}/responders": {
+      "post": {
+        "operationId": "IncidentsController_assignResponder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignResponderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Responder assigned successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Assign a responder to an incident",
+        "tags": [
+          "Incidents"
+        ]
+      }
+    },
+    "/api/incidents/{id}/request-emergency-service": {
+      "post": {
+        "operationId": "IncidentsController_requestEmergencyService",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestEmergencyServiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Emergency service request forwarded"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Request emergency service (ambulance or police) for an incident",
+        "tags": [
+          "Incidents"
+        ]
+      }
+    },
+    "/api/path-guard/start": {
+      "post": {
+        "operationId": "PathGuardController_startSession",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartPathGuardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "PathGuard session started successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Start a new PathGuard session",
+        "tags": [
+          "PathGuard"
+        ]
+      }
+    },
+    "/api/path-guard/active": {
+      "get": {
+        "operationId": "PathGuardController_getActiveSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Active session details"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get the active PathGuard session for current user",
+        "tags": [
+          "PathGuard"
+        ]
+      }
+    },
+    "/api/path-guard/{sessionId}/location": {
+      "post": {
+        "operationId": "PathGuardController_reportLocation",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePathGuardLocationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Location update recorded. Returns whether an emergency was triggered."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Report current location for an active PathGuard session",
+        "tags": [
+          "PathGuard"
+        ]
+      }
+    },
+    "/api/path-guard/{sessionId}/complete": {
+      "patch": {
+        "operationId": "PathGuardController_completeSession",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PathGuard session completed successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Complete or cancel an active PathGuard session",
+        "tags": [
+          "PathGuard"
+        ]
+      }
+    },
+    "/api/danger-zones": {
+      "post": {
+        "operationId": "DangerZonesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDangerZoneDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Danger zone reported successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Report a new danger zone",
+        "tags": [
+          "Danger Zones"
+        ]
+      },
+      "get": {
+        "operationId": "DangerZonesController_findAll",
+        "parameters": [
+          {
+            "name": "dangerType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "POOR_LIGHTING",
+                "HIGH_CRIME_AREA",
+                "ISOLATED_AREA",
+                "CONSTRUCTION_ZONE",
+                "TRAFFIC_HAZARD",
+                "KNOWN_HANGOUT_SPOT",
+                "OTHER"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "severity",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get danger zones with optional filters",
+        "tags": [
+          "Danger Zones"
+        ]
+      }
+    },
+    "/api/danger-zones/aggregated": {
+      "get": {
+        "operationId": "DangerZonesController_getAggregatedZones",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get aggregated danger zones for mapping",
+        "tags": [
+          "Danger Zones"
+        ]
+      }
+    },
+    "/api/danger-zones/{id}": {
+      "get": {
+        "operationId": "DangerZonesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get a specific danger zone",
+        "tags": [
+          "Danger Zones"
+        ]
+      },
+      "patch": {
+        "operationId": "DangerZonesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a danger zone",
+        "tags": [
+          "Danger Zones"
+        ]
+      },
+      "delete": {
+        "operationId": "DangerZonesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a danger zone",
+        "tags": [
+          "Danger Zones"
+        ]
+      }
+    },
+    "/api/responders/profile": {
+      "get": {
+        "operationId": "RespondersController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user responder profile",
+        "tags": [
+          "Responders"
+        ]
+      },
+      "patch": {
+        "operationId": "RespondersController_updateProfile",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateResponderProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update responder profile",
+        "tags": [
+          "Responders"
+        ]
+      }
+    },
+    "/api/responders/profile/verify": {
+      "post": {
+        "operationId": "RespondersController_verifyProfile",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Verify responder profile (admin only)",
+        "tags": [
+          "Responders"
+        ]
+      }
+    },
+    "/api/responders/actions": {
+      "get": {
+        "operationId": "RespondersController_getActions",
+        "parameters": [
+          {
+            "name": "incidentId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "PENDING",
+                "IN_PROGRESS",
+                "COMPLETED",
+                "CANCELLED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get responder actions",
+        "tags": [
+          "Responders"
+        ]
+      }
+    },
+    "/api/responders/actions/{actionId}/complete": {
+      "post": {
+        "operationId": "RespondersController_completeAction",
+        "parameters": [
+          {
+            "name": "actionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Complete a responder action",
+        "tags": [
+          "Responders"
+        ]
+      }
+    },
+    "/api/responders/nearby-incidents": {
+      "get": {
+        "operationId": "RespondersController_getNearbyIncidents",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get nearby incidents for response",
+        "tags": [
+          "Responders"
+        ]
+      }
+    },
+    "/api/responders/incidents/{incidentId}/resolve": {
+      "post": {
+        "operationId": "RespondersController_resolveIncident",
+        "parameters": [
+          {
+            "name": "incidentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Resolve an incident (for assigned responders)",
+        "tags": [
+          "Responders"
+        ]
+      }
+    },
+    "/api/device-tokens": {
+      "post": {
+        "operationId": "DeviceTokensController_registerToken",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDeviceTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Device token registered successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Register a device token for push notifications",
+        "tags": [
+          "Device Tokens"
+        ]
+      },
+      "get": {
+        "operationId": "DeviceTokensController_getActiveTokens",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get active device tokens for current user",
+        "tags": [
+          "Device Tokens"
+        ]
+      }
+    },
+    "/api/device-tokens/{token}": {
+      "delete": {
+        "operationId": "DeviceTokensController_removeToken",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Deactivate a device token",
+        "tags": [
+          "Device Tokens"
+        ]
+      }
+    },
+    "/api/media/upload/{incidentId}": {
+      "post": {
+        "operationId": "MediaController_uploadMedia",
+        "parameters": [
+          {
+            "name": "incidentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadMediaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Media uploaded successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Upload media file for an incident",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/media/{id}": {
+      "get": {
+        "operationId": "MediaController_getMedia",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get media file by ID",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/media/incident/{incidentId}": {
+      "get": {
+        "operationId": "MediaController_getMediaForIncident",
+        "parameters": [
+          {
+            "name": "incidentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get all media for an incident",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/streaming/publish": {
+      "post": {
+        "operationId": "StreamingController_onPublish",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Streaming"
+        ]
+      }
+    },
+    "/api/streaming/publish_done": {
+      "post": {
+        "operationId": "StreamingController_onPublishDone",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Streaming"
+        ]
+      }
+    },
+    "/api/streaming/play": {
+      "post": {
+        "operationId": "StreamingController_onPlay",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Streaming"
+        ]
+      }
+    },
+    "/api/streaming/play_done": {
+      "post": {
+        "operationId": "StreamingController_onPlayDone",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Streaming"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Tekana Backend API",
+    "description": "\n      Comprehensive API documentation for Tekana Safety & Rescue Platform.\n      Supports JWT authentication for secure endpoints.\n    ",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3086",
+      "description": "Development Server"
+    },
+    {
+      "url": "https://api.tekana.com",
+      "description": "Production Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "Authorization",
+        "description": "Enter your JWT access token",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "User phone number",
+            "example": "+250788123456"
+          },
+          "name": {
+            "type": "string",
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "password123"
+          },
+          "role": {
+            "type": "string",
+            "description": "User role",
+            "enum": [
+              "CITIZEN",
+              "COMMUNITY_RESPONDER",
+              "POLICE_OFFICER",
+              "ADMIN",
+              "SUPER_ADMIN",
+              "EMERGENCY_DISPATCHER",
+              "MEDICAL_RESPONDER",
+              "FIRE_RESPONDER"
+            ],
+            "example": "CITIZEN",
+            "default": "CITIZEN"
+          }
+        },
+        "required": [
+          "phone",
+          "name",
+          "role"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "User information",
+            "example": {
+              "id": "user123",
+              "phone": "+250788123456",
+              "name": "John Doe",
+              "email": "john.doe@example.com",
+              "role": "CITIZEN",
+              "isVerified": true
+            }
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "expiresIn": {
+            "type": "string",
+            "description": "Token expiration time",
+            "example": "7d"
+          }
+        },
+        "required": [
+          "user",
+          "token",
+          "expiresIn"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "User phone number",
+            "example": "+250788123456"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password (optional for OTP-based login)",
+            "example": "password123"
+          },
+          "otp": {
+            "type": "string",
+            "description": "One-time password (alternative to password)",
+            "example": "123456"
+          }
+        },
+        "required": [
+          "phone"
+        ]
+      },
+      "SendOtpDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "Phone number to send OTP to",
+            "example": "+250788123456"
+          }
+        },
+        "required": [
+          "phone"
+        ]
+      },
+      "VerifyOtpDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "Phone number",
+            "example": "+250788123456"
+          },
+          "otp": {
+            "type": "string",
+            "description": "6-digit OTP code",
+            "example": "123456",
+            "minLength": 6,
+            "maxLength": 6
+          }
+        },
+        "required": [
+          "phone",
+          "otp"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User full name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "newpassword123"
+          },
+          "role": {
+            "type": "string",
+            "description": "User role",
+            "enum": [
+              "CITIZEN",
+              "COMMUNITY_RESPONDER",
+              "POLICE_OFFICER",
+              "ADMIN",
+              "SUPER_ADMIN",
+              "EMERGENCY_DISPATCHER",
+              "MEDICAL_RESPONDER",
+              "FIRE_RESPONDER"
+            ],
+            "example": "COMMUNITY_RESPONDER"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "description": "User verification status",
+            "example": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "User active status",
+            "example": true
+          }
+        }
+      },
+      "CreateTrustedContactDto": {
+        "type": "object",
+        "properties": {
+          "contactName": {
+            "type": "string",
+            "description": "Contact name",
+            "example": "Jane Doe"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone number",
+            "example": "+250788654321"
+          },
+          "contactEmail": {
+            "type": "string",
+            "description": "Contact email address",
+            "example": "jane.doe@example.com"
+          },
+          "relationship": {
+            "type": "string",
+            "description": "Relationship to user",
+            "example": "Sister"
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "description": "Whether this is the primary contact",
+            "example": false,
+            "default": false
+          }
+        },
+        "required": [
+          "contactName",
+          "contactPhone",
+          "isPrimary"
+        ]
+      },
+      "CreateIncidentDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Incident type",
+            "enum": [
+              "THEFT",
+              "ASSAULT",
+              "MEDICAL_EMERGENCY",
+              "ACCIDENT",
+              "FIRE",
+              "SUSPICIOUS_ACTIVITY",
+              "HARASSMENT",
+              "KIDNAPPING",
+              "OTHER"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "description": "Incident severity level",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "default": "MEDIUM"
+          },
+          "title": {
+            "type": "string",
+            "description": "Incident title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the incident"
+          },
+          "locationLat": {
+            "type": "number",
+            "description": "Latitude of the incident location",
+            "example": -1.9441
+          },
+          "locationLng": {
+            "type": "number",
+            "description": "Longitude of the incident location",
+            "example": 30.0619
+          },
+          "locationAddress": {
+            "type": "string",
+            "description": "Human-readable address of the incident"
+          },
+          "isSilentSOS": {
+            "type": "boolean",
+            "description": "Whether the alert was sent silently",
+            "default": false
+          },
+          "isOfflineAlert": {
+            "type": "boolean",
+            "description": "Whether the alert was sent offline via SMS/USSD",
+            "default": false
+          },
+          "pathGuardSessionId": {
+            "type": "string",
+            "description": "PathGuard session ID linked to this incident"
+          }
+        },
+        "required": [
+          "type",
+          "locationLat",
+          "locationLng"
+        ]
+      },
+      "UpdateIncidentStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Updated incident status",
+            "enum": [
+              "ACTIVE",
+              "RESPONDERS_DISPATCHED",
+              "IN_PROGRESS",
+              "RESOLVED",
+              "FALSE_ALARM",
+              "CANCELLED"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "description": "Optional updated severity level",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional resolution notes"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "AssignResponderDto": {
+        "type": "object",
+        "properties": {
+          "responderId": {
+            "type": "string",
+            "description": "Responder profile ID to assign to the incident"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Notes for the responder assignment"
+          }
+        },
+        "required": [
+          "responderId"
+        ]
+      },
+      "RequestEmergencyServiceDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "StartPathGuardDto": {
+        "type": "object",
+        "properties": {
+          "startLocationLat": {
+            "type": "number",
+            "description": "Starting latitude for the PathGuard session"
+          },
+          "startLocationLng": {
+            "type": "number",
+            "description": "Starting longitude for the PathGuard session"
+          },
+          "destinationLat": {
+            "type": "number",
+            "description": "Destination latitude"
+          },
+          "destinationLng": {
+            "type": "number",
+            "description": "Destination longitude"
+          },
+          "deviationThreshold": {
+            "type": "number",
+            "description": "Allowed deviation threshold in meters",
+            "default": 50
+          },
+          "immobilityTimeout": {
+            "type": "number",
+            "description": "Immobility timeout in seconds",
+            "default": 300
+          }
+        },
+        "required": [
+          "startLocationLat",
+          "startLocationLng"
+        ]
+      },
+      "UpdatePathGuardLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Current latitude reported by the device"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Current longitude reported by the device"
+          },
+          "speed": {
+            "type": "number",
+            "description": "Current speed in meters per second"
+          },
+          "heading": {
+            "type": "number",
+            "description": "Current heading in degrees"
+          },
+          "accuracy": {
+            "type": "number",
+            "description": "Horizontal accuracy in meters"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "CreateDangerZoneDto": {
+        "type": "object",
+        "properties": {
+          "locationLat": {
+            "type": "number",
+            "description": "Latitude of the danger zone"
+          },
+          "locationLng": {
+            "type": "number",
+            "description": "Longitude of the danger zone"
+          },
+          "locationAddress": {
+            "type": "string",
+            "description": "Human-readable address"
+          },
+          "dangerType": {
+            "type": "string",
+            "description": "Type of danger",
+            "enum": [
+              "POOR_LIGHTING",
+              "HIGH_CRIME_AREA",
+              "ISOLATED_AREA",
+              "CONSTRUCTION_ZONE",
+              "TRAFFIC_HAZARD",
+              "KNOWN_HANGOUT_SPOT",
+              "OTHER"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the danger"
+          },
+          "severity": {
+            "type": "string",
+            "description": "Severity level",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "CRITICAL"
+            ],
+            "default": "MEDIUM"
+          }
+        },
+        "required": [
+          "locationLat",
+          "locationLng",
+          "dangerType",
+          "description"
+        ]
+      },
+      "UpdateResponderProfileDto": {
+        "type": "object",
+        "properties": {
+          "isAvailable": {
+            "type": "boolean",
+            "description": "Whether the responder is available"
+          },
+          "currentLocationLat": {
+            "type": "number",
+            "description": "Current location latitude"
+          },
+          "currentLocationLng": {
+            "type": "number",
+            "description": "Current location longitude"
+          },
+          "responseRadius": {
+            "type": "number",
+            "description": "Response radius in meters"
+          },
+          "skills": {
+            "description": "Skills array",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "certifications": {
+            "description": "Certifications array",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "verificationDocument": {
+            "type": "string",
+            "description": "Verification document path"
+          }
+        }
+      },
+      "CreateDeviceTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Firebase device token"
+          },
+          "deviceType": {
+            "type": "string",
+            "description": "Device type",
+            "enum": [
+              "ANDROID",
+              "IOS",
+              "WEB",
+              "USSD"
+            ]
+          }
+        },
+        "required": [
+          "token",
+          "deviceType"
+        ]
+      },
+      "UploadMediaDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Media type",
+            "enum": [
+              "AUDIO",
+              "VIDEO",
+              "IMAGE",
+              "DOCUMENT"
+            ]
+          },
+          "fileName": {
+            "type": "string",
+            "description": "File name"
+          },
+          "duration": {
+            "type": "string",
+            "description": "Duration in seconds"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    }
+  }
+}
