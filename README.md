@@ -176,6 +176,8 @@ Tekana supports RTMP live streaming with automatic recording and upload to MinIO
    - Stream Key: `{streamKey}` (from incident response)
    - Start streaming
 
+   **Audio-Only Streaming:** Audio-only streaming is supported. In OBS, disable video output in Settings > Video > Base (Canvas) Resolution and Output (Scaled) Resolution set to 1x1 or use an audio-only source.
+
 3. **Stop Streaming:**
    Stop the stream in OBS. The recording is automatically saved locally to `./recordings` and uploaded to MinIO at `streams/{streamKey}-{timestamp}.flv`.
 
