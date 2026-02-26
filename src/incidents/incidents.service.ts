@@ -23,6 +23,7 @@ import { FcmService } from '../messaging/fcm.service';
 import { SmsService } from '../sms/sms.service';
 import { AuditService } from '../audit/audit.service';
 import { EmailService } from '../email/email.service';
+import { MapsService } from '../maps/maps.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -37,6 +38,7 @@ export class IncidentsService {
     private smsService: SmsService,
     private auditService: AuditService,
     private emailService: EmailService,
+    private mapsService: MapsService,
   ) {}
 
   async createIncident(userId: string, dto: CreateIncidentDto): Promise<Incident> {
@@ -50,6 +52,12 @@ export class IncidentsService {
       throw new NotFoundException('PathGuard session not found');
     }
 
+    // Auto-fill locationAddress if not provided
+    let locationAddress = dto.locationAddress;
+    if (!locationAddress) {
+      locationAddress = await this.mapsService.reverseGeocode(dto.locationLat, dto.locationLng) || undefined;
+    }
+
     const incident = await this.prisma.incident.create({
       data: {
         userId,
@@ -59,7 +67,7 @@ export class IncidentsService {
         description: dto.description,
         locationLat: dto.locationLat,
         locationLng: dto.locationLng,
-        locationAddress: dto.locationAddress,
+        locationAddress,
         isSilentSOS: dto.isSilentSOS ?? undefined,
         isOfflineAlert: dto.isOfflineAlert ?? undefined,
         streamKey: uuidv4(),
