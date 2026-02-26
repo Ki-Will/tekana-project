@@ -8,45 +8,40 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
-    .setTitle("Tekana Backend API")
-    .setDescription(
-      `
-      This is a documentation of all APIs in Tekana
-      `
-    )
-    .setVersion("1.0.0")
-    // .addBearerAuth(
-    //   {
-    //     type: "http",
-    //     scheme: "bearer",
-    //     bearerFormat: "JWT",
-    //     name: "Authorization",
-    //     description: "Enter your JWT access token",
-    //     in: "header"
-    //   },
-    //   "JWT-auth"
-    // )
-    // .addCookieAuth(
-    //   "refresh_toke",
-    //   {
-    //     type: "apiKey",
-    //     in:"cookie",
-    //     name:"refresh_token",
-    //     description:"Refresh token here"
-    //   },
-    //   "refresh-token"
-    // )
-    .addServer("http://localhost:3086", "Dev Server")
-    .build()
-
-    const document = SwaggerModule.createDocument(app ,config);
-    SwaggerModule.setup("api", app , document , {
-      customSiteTitle: "Tekana API docs",
-      customCss: ".swagger-ui .topbar {display: none}",
-      swaggerOptions: {
-        persistAuthorization: true ,
+    .setTitle('Tekana Backend API')
+    .setDescription(`
+      Comprehensive API documentation for Tekana Safety & Rescue Platform.
+      Supports JWT authentication for secure endpoints.
+    `)
+    .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter your JWT access token',
+        in: 'header',
       },
-    });
+      'JWT-auth'
+    )
+    .addServer('http://localhost:3086', 'Development Server')
+    .addServer('https://api.tekana.com', 'Production Server')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document, {
+    customSiteTitle: 'Tekana API Documentation',
+    customCss: '.swagger-ui .topbar { display: none; }',
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      docExpansion: 'none',
+      filter: true,
+      showExtensions: true,
+      showCommonExtensions: true,
+    },
+  });
 
 
   await app.listen(process.env.PORT ?? 3000);
