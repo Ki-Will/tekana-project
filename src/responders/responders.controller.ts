@@ -11,7 +11,7 @@ import { Roles } from 'src/auth/guards/roles.decorator';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('responders')
-@Roles('COMMUNITY_RESPONDER', 'MEDICAL_RESPONDER', 'FIRE_RESPONDER', 'ADMIN')
+@Roles('COMMUNITY_RESPONDER', 'MEDICAL_RESPONDER', 'FIRE_RESPONDER', 'ADMIN' ,'EMERGENCY_DISPATCHER')
 export class RespondersController {
   constructor(private readonly respondersService: RespondersService) {}
 
