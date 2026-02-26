@@ -1,0 +1,15 @@
+{
+  "workspace": {
+    "id": "ca707732-5817-4283-8c5b-3c0bb85a95a3"
+  },
+  "entities": {
+    "environments": [],
+    "flows": [],
+    "globals": [],
+    "mocks": [],
+    "specs": [],
+    "collections": [
+      "..\\Tekana-API.postman_collection.json"
+    ]
+  }
+}
