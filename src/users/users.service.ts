@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, UserRole, Prisma } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,7 +23,9 @@ export class UsersService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ConflictException('User with this phone or email already exists');
+        throw new ConflictException(
+          'User with this phone or email already exists',
+        );
       }
       throw error;
     }
@@ -32,7 +38,7 @@ export class UsersService {
     orderBy?: Prisma.UserOrderByWithRelationInput;
   }) {
     const { skip, take, where, orderBy } = params;
-    
+
     const [users, total] = await Promise.all([
       this.prisma.user.findMany({
         skip,
@@ -112,7 +118,9 @@ export class UsersService {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new ConflictException('User with this phone or email already exists');
+        throw new ConflictException(
+          'User with this phone or email already exists',
+        );
       }
       if (error.code === 'P2025') {
         throw new NotFoundException(`User with ID ${id} not found`);
@@ -135,27 +143,73 @@ export class UsersService {
   }
 
   async deactivateUser(id: string): Promise<User> {
-    return this.prisma.user.update({
-      where: { id },
-      data: { isActive: false },
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data: { isActive: false },
+      });
+      return user;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 
   async activateUser(id: string): Promise<User> {
-    return this.prisma.user.update({
-      where: { id },
-      data: { isActive: true },
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data: { isActive: true },
+      });
+      return user;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 
   async updateUserRole(id: string, role: UserRole): Promise<User> {
-    return this.prisma.user.update({
-      where: { id },
-      data: { role },
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data: { role },
+      });
+
+      // If the new role is a responder role, ensure a ResponderProfile exists
+      const responderRoles = ['COMMUNITY_RESPONDER', 'MEDICAL_RESPONDER', 'FIRE_RESPONDER', 'POLICE_OFFICER', 'EMERGENCY_DISPATCHER'];
+      if (responderRoles.includes(role)) {
+        const existingProfile = await this.prisma.responderProfile.findUnique({
+          where: { userId: id },
+        });
+        if (!existingProfile) {
+          await this.prisma.responderProfile.create({
+            data: {
+              userId: id,
+              isAvailable: false,
+              isVerified: false,
+              specialization: 'EMERGENCY_RESPONSE',
+            },
+          });
+        }
+      }
+
+      return user;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 
-  async addTrustedContact(userId: string, createTrustedContactDto: CreateTrustedContactDto) {
+  async addTrustedContact(
+    userId: string,
+    createTrustedContactDto: CreateTrustedContactDto,
+  ) {
     return this.prisma.trustedContact.create({
       data: {
         ...createTrustedContactDto,
