@@ -82,6 +82,10 @@ export class DangerZonesService {
       throw new Error('Danger zone not found');
     }
 
+    if (!dangerZone.user) {
+      throw new Error('User not found for danger zone');
+    }
+
     return dangerZone;
   }
 
