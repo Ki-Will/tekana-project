@@ -18,7 +18,7 @@ import { CreateIncidentDto } from './dto/create-incident.dto';
 import { UpdateIncidentStatusDto } from './dto/update-incident-status.dto';
 import { AssignResponderDto } from './dto/assign-responder.dto';
 import { FilterIncidentsDto } from './dto/filter-incidents.dto';
-import { RateLimitGuard } from '../common/guards/rate-limit.guard';
+import { RateLimitGuard } from '../auth/guards/rate-limit.guard';
 
 @ApiTags('Incidents')
 @ApiBearerAuth()
