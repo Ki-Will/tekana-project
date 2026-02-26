@@ -20,6 +20,7 @@ model User {
   role            UserRole @default(CITIZEN)
   isVerified      Boolean  @default(false)
   isActive        Boolean  @default(true)
+  isAvailable      Boolean  @default(true)
   lastLoginAt     DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -44,6 +45,9 @@ enum UserRole {
   POLICE_OFFICER
   ADMIN
   SUPER_ADMIN
+  EMERGENCY_DISPATCHER
+  MEDICAL_RESPONDER
+  FIRE_RESPONDER
 }
 
 // Trusted contacts for emergency alerts
