@@ -1,9 +1,10 @@
-import { Controller, Get, Param, Patch, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Post, Delete, Body, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { Roles } from '../auth/guards/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { User, ResponderProfile, UserRole } from '@prisma/client';
+import { CreateResponderProfileDto } from './dto/create-responder-profile.dto';
 
 @ApiTags('Admin')
 @ApiBearerAuth()
@@ -54,21 +55,30 @@ export class AdminController {
   }
 
   @Roles('ADMIN')
-  @Post('responders/:userId')
-  @ApiOperation({ summary: 'Create responder profile for user' })
+  @Post('responders')
+  @ApiOperation({ summary: 'Create responder profile, optionally creating user' })
   @ApiResponse({ status: 201, description: 'Responder profile created' })
-  async createResponderProfile(
-    @Param('userId') userId: string,
-    @Body() data: {
-      responderType: string;
-      specialization?: string;
-      experienceYears?: number;
-      certifications?: string[];
-      isAvailable?: boolean;
-      currentLocationLat?: number;
-      currentLocationLng?: number;
-    },
+  async createResponderProfile(@Body() data: CreateResponderProfileDto): Promise<ResponderProfile> {
+    return this.adminService.createResponderProfile(data);
+  }
+
+  @Roles('ADMIN')
+  @Delete('responders/:id')
+  @ApiOperation({ summary: 'Delete responder profile' })
+  @ApiResponse({ status: 200, description: 'Responder deleted' })
+  async deleteResponder(@Param('id') id: string) {
+    await this.adminService.deleteResponder(id);
+    return { message: 'Responder deleted' };
+  }
+
+  @Roles('ADMIN')
+  @Patch('responders/:id/status')
+  @ApiOperation({ summary: 'Update responder status' })
+  @ApiResponse({ status: 200, description: 'Status updated' })
+  async updateResponderStatus(
+    @Param('id') id: string,
+    @Body() data: { isAvailable?: boolean; isVerified?: boolean },
   ): Promise<ResponderProfile> {
-    return this.adminService.createResponderProfile(userId, data);
+    return this.adminService.updateResponderStatus(id, data);
   }
 }
