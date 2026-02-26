@@ -15,6 +15,8 @@ import { DeviceTokensModule } from './device-tokens/device-tokens.module';
 import { MediaModule } from './media/media.module';
 import { AuditModule } from './audit/audit.module';
 import { StreamingModule } from './streaming/streaming.module';
+import { MapsModule } from './maps/maps.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { StreamingModule } from './streaming/streaming.module';
     MediaModule,
     AuditModule,
     StreamingModule,
+    MapsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
