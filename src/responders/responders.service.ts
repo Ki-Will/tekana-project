@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateResponderProfileDto } from './dto/update-responder-profile.dto';
-import { ResponderProfile, ResponderAction, Prisma } from '@prisma/client';
+import { ResponderProfile, ResponderAction, Prisma, IncidentStatus } from '@prisma/client';
 
 @Injectable()
 export class RespondersService {
@@ -136,5 +136,44 @@ export class RespondersService {
 
   private toRadians(value: number): number {
     return (value * Math.PI) / 180;
+  }
+
+  async resolveIncident(userId: string, incidentId: string, notes?: string) {
+    const profile = await this.getProfile(userId);
+
+    const action = await this.prisma.responderAction.findFirst({
+      where: {
+        responderId: profile.id,
+        incidentId,
+        status: { in: ['PENDING', 'IN_PROGRESS'] }
+      }
+    });
+
+    if (!action) {
+      throw new NotFoundException('No active action found for this incident');
+    }
+
+    // Update incident to resolved
+    await this.prisma.incident.update({
+      where: { id: incidentId },
+      data: {
+        status: IncidentStatus.RESOLVED,
+        resolvedAt: new Date(),
+      }
+    });
+
+    // Complete the responder's action
+    await this.prisma.responderAction.update({
+      where: { id: action.id },
+      data: {
+        status: 'COMPLETED',
+        completedAt: new Date(),
+        notes,
+      }
+    });
+
+    this.logger.log(`Responder ${userId} resolved incident ${incidentId}`);
+
+    return { message: 'Incident resolved successfully' };
   }
 }
