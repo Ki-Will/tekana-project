@@ -1,0 +1,414 @@
+{
+  "info": {
+    "_postman_id": "146e13ab-2349-4844-afba-239c10f8b2ea",
+    "name": "Tekana Backend API Copy",
+    "description": "``` latex\n  Comprehensive API documentation for Tekana Safety & Rescue Platform.\n  Supports JWT authentication for secure endpoints.\n\n ```",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "health",
+          "item": [],
+          "id": "edc5b5d0-c115-40c7-9004-011d24074f75"
+        },
+        {
+          "name": "auth",
+          "item": [
+            {
+              "name": "register",
+              "item": [],
+              "id": "96f66796-92bb-4733-8b46-74b9b38721d4"
+            },
+            {
+              "name": "login",
+              "item": [],
+              "id": "8f0bc23a-7a0d-4457-be9c-fc251028c770"
+            },
+            {
+              "name": "send-otp",
+              "item": [],
+              "id": "398008bb-582b-4050-b81b-bf00dfc8d3b9"
+            },
+            {
+              "name": "verify-otp",
+              "item": [],
+              "id": "d8227ba4-cf94-46fd-86bf-0d4544b2f7ab"
+            },
+            {
+              "name": "refresh",
+              "item": [],
+              "id": "9b9763b9-afee-4a66-98f7-a5785b62bff0"
+            },
+            {
+              "name": "logout",
+              "item": [],
+              "id": "841ef5cf-8bfa-404b-adf0-3505b3c253aa"
+            },
+            {
+              "name": "profile",
+              "item": [],
+              "id": "bc1c34b0-5611-46fc-82d8-8be2de7db379"
+            }
+          ],
+          "id": "72e8daf3-76ea-4849-83e3-e78923bb09ac"
+        },
+        {
+          "name": "users",
+          "item": [
+            {
+              "name": "responders",
+              "item": [],
+              "id": "ed538397-ab85-4270-9ff1-7d4b5368fed8"
+            },
+            {
+              "name": "search",
+              "item": [],
+              "id": "4deeda3b-8ef9-45b9-9b03-cd9a9a1cc0fb"
+            },
+            {
+              "name": "role",
+              "item": [
+                {
+                  "name": "{role}",
+                  "item": [],
+                  "id": "f1908c2c-bc87-489d-a7ae-df29c0eabd36"
+                }
+              ],
+              "id": "2f98d985-e6c7-4de1-859e-be372b6d0ef4"
+            },
+            {
+              "name": "profile",
+              "item": [],
+              "id": "1e2ecf46-faec-426d-a74d-fdd7b492b7ea"
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "deactivate",
+                  "item": [],
+                  "id": "3caf0704-be69-4eaa-8084-1b5ac7364882"
+                },
+                {
+                  "name": "activate",
+                  "item": [],
+                  "id": "a34832b6-c38a-4fb7-b52d-2b04d974690b"
+                },
+                {
+                  "name": "role",
+                  "item": [],
+                  "id": "215535dc-4076-459d-b713-c7dc7b276660"
+                },
+                {
+                  "name": "trusted-contacts",
+                  "item": [
+                    {
+                      "name": "{contactId}",
+                      "item": [],
+                      "id": "71330e8d-93c2-4a63-9c91-bb5ab392db66"
+                    }
+                  ],
+                  "id": "29db005d-84c8-4e14-b1d7-3537e645e454"
+                }
+              ],
+              "id": "4a2e7303-4de9-48f0-85ff-46ba714c6a69"
+            }
+          ],
+          "id": "a8c76dc2-504b-455b-b804-7b13ecacd61e"
+        },
+        {
+          "name": "incidents",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "status",
+                  "item": [],
+                  "id": "11c1eccd-cc43-488c-aecf-8aa6f9c51f35"
+                },
+                {
+                  "name": "responders",
+                  "item": [],
+                  "id": "4f578351-9072-4341-b706-12746b59b960"
+                },
+                {
+                  "name": "request-emergency-service",
+                  "item": [],
+                  "id": "17606b17-0d36-4510-b377-660ccb03c9ca"
+                }
+              ],
+              "id": "a4b29a7f-031d-4787-9c78-24ffc540a381"
+            }
+          ],
+          "id": "b67155fe-697f-4e79-9a17-fd29a6b753d5"
+        },
+        {
+          "name": "path-guard",
+          "item": [
+            {
+              "name": "start",
+              "item": [],
+              "id": "cfc36808-dd36-47d0-a351-7619342c8cce"
+            },
+            {
+              "name": "active",
+              "item": [],
+              "id": "21849e49-1687-407e-b888-70d4dcf185a0"
+            },
+            {
+              "name": "{sessionId}",
+              "item": [
+                {
+                  "name": "location",
+                  "item": [],
+                  "id": "34ef1c10-d1b0-4a91-beaf-a4bd7085de85"
+                },
+                {
+                  "name": "complete",
+                  "item": [],
+                  "id": "1a3c95b5-b543-48e9-b03f-04471d4a7dd1"
+                }
+              ],
+              "id": "67ad05f4-675d-4f35-a82a-22d78b0e143e"
+            }
+          ],
+          "id": "c2299b16-7c57-418f-a48f-512fefa5ba23"
+        },
+        {
+          "name": "danger-zones",
+          "item": [
+            {
+              "name": "aggregated",
+              "item": [],
+              "id": "420523af-f5ae-4c57-a60b-5e2d25bfe62b"
+            },
+            {
+              "name": "{id}",
+              "item": [],
+              "id": "148db827-0ffc-4cf0-af66-94b8f4319571"
+            }
+          ],
+          "id": "61b0b0aa-a057-40ab-a63b-f2960986e069"
+        },
+        {
+          "name": "responders",
+          "item": [
+            {
+              "name": "profile",
+              "item": [
+                {
+                  "name": "verify",
+                  "item": [],
+                  "id": "787dcc19-b3d1-49a6-ba07-c77ea98e47f8"
+                }
+              ],
+              "id": "053484ad-19ea-4d82-8c4e-5fa748793573"
+            },
+            {
+              "name": "actions",
+              "item": [
+                {
+                  "name": "{actionId}",
+                  "item": [
+                    {
+                      "name": "complete",
+                      "item": [],
+                      "id": "f138ba24-d0c0-4ce6-8110-98f674698131"
+                    }
+                  ],
+                  "id": "536db6b7-9268-41cb-a719-baf38b7298da"
+                }
+              ],
+              "id": "4c35ba7e-bef0-4fb1-aeab-d7882dd56643"
+            },
+            {
+              "name": "nearby-incidents",
+              "item": [],
+              "id": "12e5be73-a346-45ef-ae38-759efafe982d"
+            },
+            {
+              "name": "incidents",
+              "item": [
+                {
+                  "name": "{incidentId}",
+                  "item": [
+                    {
+                      "name": "resolve",
+                      "item": [],
+                      "id": "e1b19785-d61f-4db6-a4e3-06d8c54df067"
+                    }
+                  ],
+                  "id": "2a7565ab-de18-4ccf-b018-69945e8d2f6f"
+                }
+              ],
+              "id": "ba115445-8a5a-4094-923c-8b467d58e37d"
+            }
+          ],
+          "id": "a1347f4b-528e-41b3-a1a8-006b92de2e71"
+        },
+        {
+          "name": "device-tokens",
+          "item": [
+            {
+              "name": "{token}",
+              "item": [],
+              "id": "271c9f18-33f6-463b-8dcc-7139022eedf6"
+            }
+          ],
+          "id": "014da129-772e-45fa-af78-47f2f61b52aa"
+        },
+        {
+          "name": "media",
+          "item": [
+            {
+              "name": "upload",
+              "item": [
+                {
+                  "name": "{incidentId}",
+                  "item": [],
+                  "id": "fd6f2d60-b23e-40a1-bfd9-daf319ffb56a"
+                }
+              ],
+              "id": "c8db95ea-f563-4479-87b7-870c1854af44"
+            },
+            {
+              "name": "{id}",
+              "item": [],
+              "id": "1b434376-113d-4983-8ccf-7cadcf38cc8c"
+            },
+            {
+              "name": "incident",
+              "item": [
+                {
+                  "name": "{incidentId}",
+                  "item": [],
+                  "id": "7b2362a9-20b8-4d06-b68d-7d98b9f155e7"
+                }
+              ],
+              "id": "04cb9293-32e7-4570-967f-914e941baf91"
+            }
+          ],
+          "id": "683921a1-d0a9-454e-9147-0ed1be7e09fd"
+        },
+        {
+          "name": "streaming",
+          "item": [
+            {
+              "name": "publish",
+              "item": [],
+              "id": "8eb1a5c0-ffbd-4d7a-92ae-e59661626915"
+            },
+            {
+              "name": "publish_done",
+              "item": [],
+              "id": "80267bb6-5fab-4e8c-ba55-3bb21b0692fc"
+            },
+            {
+              "name": "play",
+              "item": [],
+              "id": "d49237c7-4315-4a5b-9c0c-2b01c323a97b"
+            },
+            {
+              "name": "play_done",
+              "item": [],
+              "id": "cc382ed9-0ad5-49a0-9055-4e9db051fd59"
+            }
+          ],
+          "id": "743016ad-957d-4191-bc01-77ab6f60127d"
+        },
+        {
+          "name": "App Controller get Hello",
+          "id": "8a6b698b-424e-4995-9f29-d0112a6608a4",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7848f2ed-fa56-4b64-bbfa-1b64073b445e",
+              "name": "Untitled Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ],
+      "id": "765c39f8-4831-4e6b-9485-be86f9da61bf"
+    }
+  ],
+  "variable": [
+    {
+      "id": "6b81324e-2f4e-4b87-9970-29fe49d64d5b",
+      "key": "baseUrl",
+      "value": "http://localhost:3086"
+    },
+    {
+      "id": "3e9aeea2-c118-4fcd-91b3-c7fa5ae739c3",
+      "key": "userID",
+      "value": ""
+    },
+    {
+      "id": "4c38cdc1-8450-40e0-99dc-98ac5b9381ad",
+      "key": "token",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "32b82740-9707-4b05-b5fa-994abbdf58e3",
+      "key": "userIDtrustedcontact",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "6ff430c0-2477-4cde-aad7-30546f97f339",
+      "key": "incidendId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "9848bb5e-e35f-4323-abfc-9746904ab0ae",
+      "key": "Pathguardid",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "15edc516-3b37-4476-9834-ac38004b377f",
+      "key": "DangerZoneID",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
