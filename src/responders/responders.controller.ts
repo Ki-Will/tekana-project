@@ -1,14 +1,17 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { RespondersService } from './responders.service';
 import { UpdateResponderProfileDto } from './dto/update-responder-profile.dto';
 import { ActionStatus } from '@prisma/client';
+import { Roles } from 'src/auth/guards/roles.decorator';
 
 @ApiTags('Responders')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('responders')
+@Roles('RESPONDER', 'ADMIN')
 export class RespondersController {
   constructor(private readonly respondersService: RespondersService) {}
 
