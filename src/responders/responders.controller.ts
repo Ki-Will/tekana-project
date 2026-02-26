@@ -11,7 +11,7 @@ import { Roles } from 'src/auth/guards/roles.decorator';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('responders')
-@Roles('RESPONDER', 'ADMIN')
+@Roles('COMMUNITY_RESPONDER', 'MEDICAL_RESPONDER', 'FIRE_RESPONDER', 'ADMIN')
 export class RespondersController {
   constructor(private readonly respondersService: RespondersService) {}
 
@@ -59,5 +59,15 @@ export class RespondersController {
   @ApiOperation({ summary: 'Get nearby incidents for response' })
   async getNearbyIncidents(@Request() req) {
     return this.respondersService.getNearbyIncidents(req.user.id);
+  }
+
+  @Post('incidents/:incidentId/resolve')
+  @ApiOperation({ summary: 'Resolve an incident (for assigned responders)' })
+  async resolveIncident(
+    @Request() req,
+    @Param('incidentId') incidentId: string,
+    @Body('notes') notes?: string,
+  ) {
+    return this.respondersService.resolveIncident(req.user.id, incidentId, notes);
   }
 }
