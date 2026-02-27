@@ -55,7 +55,7 @@ export class IncidentsService {
 
     // Auto-fill locationAddress if not provided
     let locationAddress = dto.locationAddress;
-    if (!locationAddress && process.env.GOOGLE_MAPS_API_KEY) {
+    if (!locationAddress) {
       locationAddress = await this.mapsService.reverseGeocode(dto.locationLat, dto.locationLng) || undefined;
     }
 
