@@ -48,7 +48,11 @@ export class MapsService {
   /**
    * Reverse geocode latitude and longitude to address
    */
-  async reverseGeocode(lat: number, lng: number): Promise<string | null> {
+  async reverseGeocode(lat: number, lng: number): Promise<string | undefined> {
+    if (!this.apiKey) {
+      return undefined;
+    }
+
     try {
       const response = await this.client.reverseGeocode({
         params: {
@@ -62,10 +66,10 @@ export class MapsService {
       }
 
       this.logger.warn(`Reverse geocoding failed for ${lat},${lng}, status: ${response.data.status}`);
-      return null;
+      return undefined;
     } catch (error) {
       this.logger.error('Reverse geocoding error', error);
-      return null;
+      return undefined;
     }
   }
 
