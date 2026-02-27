@@ -11,5 +11,6 @@ import { MapsModule } from '../maps/maps.module';
   imports: [PrismaModule, MessagingModule, AuditModule, EmailModule, MapsModule],
   controllers: [IncidentsController],
   providers: [IncidentsService],
+  exports: [IncidentsService],
 })
 export class IncidentsModule {}
