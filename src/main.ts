@@ -7,6 +7,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('Tekana Backend API')
     .setDescription(`
