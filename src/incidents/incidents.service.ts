@@ -25,6 +25,7 @@ import { AuditService } from '../audit/audit.service';
 import { EmailService } from '../email/email.service';
 import { MapsService } from '../maps/maps.service';
 import { v4 as uuidv4 } from 'uuid';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class IncidentsService {
@@ -295,11 +296,19 @@ export class IncidentsService {
       incidentId: statusNotification.incidentId ?? undefined,
     });
 
-    const updatedIncident = await this.prisma.incident.update({
-      where: { id },
-      data,
-      include: this.defaultIncidentInclude(),
-    });
+    let updatedIncident: Incident;
+    try {
+      updatedIncident = await this.prisma.incident.update({
+        where: { id },
+        data,
+        include: this.defaultIncidentInclude(),
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException('Incident not found');
+      }
+      throw error;
+    }
 
     await this.cacheIncident(updatedIncident);
     await this.invalidateIncidentLists();

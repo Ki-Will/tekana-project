@@ -17,12 +17,13 @@ Tekana is a mobile-first safety and rescue platform designed to provide instant 
 - **One-Tap SOS**: Instant emergency alerts with GPS location
 - **Media Upload**: Audio/video evidence capture and async processing
 - **PathGuard**: Night walking protection with safety routes
-- **Live Streaming**: RTMP-based live video streaming with automatic recording
+- **Live Streaming**: RTMP-based live video streaming with authentication support
 - **Community Danger Zones**: Map-based danger zone reporting and alerts
 - **Offline Alerts**: SMS/USSD fallbacks for network issues
 - **Push Notifications**: Real-time FCM notifications
 - **Web Dashboard**: Administrative interface for authorities
 - **Incident Management**: Comprehensive incident tracking and response
+- **Admin Panel**: User and responder management endpoints
 
 ## 🛠 Tech Stack
 
@@ -208,6 +209,16 @@ PathGuard behavior is configurable via environment variables:
 - `POST /api/streaming/play` - RTMP play hook
 - `POST /api/streaming/play_done` - RTMP play done hook
 
+### Admin (Requires ADMIN role)
+- `GET /api/admin/users` - Get all users
+- `GET /api/admin/users/:id` - Get user by ID
+- `PATCH /api/admin/users/:id/role` - Update user role
+- `GET /api/admin/responders` - Get all responders
+- `GET /api/admin/responders/:id` - Get responder by ID
+- `POST /api/admin/responders` - Create responder profile (optionally with user)
+- `DELETE /api/admin/responders/:id` - Delete responder profile
+- `PATCH /api/admin/responders/:id/status` - Update responder status
+
 ### Danger Zones
 - `POST /api/danger-zones` - Report danger zone
 - `GET /api/danger-zones` - List danger zones
@@ -226,6 +237,7 @@ Tekana supports RTMP live streaming with automatic recording and upload to MinIO
    - In Settings > Stream, select Custom
    - Server: `rtmp://localhost:1935/live`
    - Stream Key: `{streamKey}` (from incident response)
+   - For authentication (optional): Append `?user={phone}&pass={password}` to the Server URL
    - Start streaming
 
    **Audio-Only Streaming:** Audio-only streaming is supported. In OBS, disable video output in Settings > Video > Base (Canvas) Resolution and Output (Scaled) Resolution set to 1x1 or use an audio-only source.

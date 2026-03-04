@@ -13,7 +13,7 @@ import { EmailService } from '../email/email.service';
 @Module({
   imports: [ConfigModule, PrismaModule, IncidentsModule, MessagingModule, MapsModule],
   controllers: [PathGuardController],
-  providers: [PathGuardService, IncidentsService , AuditService , EmailService],
+  providers: [PathGuardService, IncidentsService, AuditService, EmailService],
   exports: [PathGuardService],
 })
 export class PathGuardModule {}

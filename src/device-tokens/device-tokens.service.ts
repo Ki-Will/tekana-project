@@ -1,7 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDeviceTokenDto } from './dto/create-device-token.dto';
 import { DeviceToken, DeviceType } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class DeviceTokensService {
@@ -10,34 +11,41 @@ export class DeviceTokensService {
   constructor(private readonly prisma: PrismaService) {}
 
   async registerToken(userId: string, dto: CreateDeviceTokenDto): Promise<DeviceToken> {
-    // Upsert token for user
-    const token = await this.prisma.deviceToken.upsert({
-      where: {
-        userId_token: {
+    try {
+      // Upsert token for user
+      const token = await this.prisma.deviceToken.upsert({
+        where: {
+          userId_token: {
+            userId,
+            token: dto.token,
+          },
+        },
+        update: {
+          deviceType: dto.deviceType,
+          isActive: true,
+          lastUsedAt: new Date(),
+        },
+        create: {
           userId,
           token: dto.token,
+          deviceType: dto.deviceType,
+          isActive: true,
+          lastUsedAt: new Date(),
         },
-      },
-      update: {
-        deviceType: dto.deviceType,
-        isActive: true,
-        lastUsedAt: new Date(),
-      },
-      create: {
-        userId,
-        token: dto.token,
-        deviceType: dto.deviceType,
-        isActive: true,
-        lastUsedAt: new Date(),
-      },
-    });
+      });
 
-    this.logger.log(`Device token registered for user ${userId}`);
-    return token;
+      this.logger.log(`Device token registered for user ${userId}`);
+      return token;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2003') {
+        throw new NotFoundException('User not found');
+      }
+      throw error;
+    }
   }
 
   async removeToken(userId: string, token: string): Promise<void> {
-    await this.prisma.deviceToken.updateMany({
+    const result = await this.prisma.deviceToken.updateMany({
       where: {
         userId,
         token,
@@ -46,6 +54,10 @@ export class DeviceTokensService {
         isActive: false,
       },
     });
+
+    if (result.count === 0) {
+      throw new NotFoundException('Device token not found or already inactive');
+    }
 
     this.logger.log(`Device token deactivated for user ${userId}`);
   }
