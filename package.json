@@ -24,7 +24,7 @@
 
     "start:debug": "nest start --debug --watch",
 
-    "start:prod": "node dist/main.js",
+    "start:prod": "node dist/src/main.js",
 
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
 
@@ -54,6 +54,8 @@
 
     "@aws-sdk/client-s3": "^3.665.0",
 
+    "@googlemaps/google-maps-services-js": "^3.4.2",
+
     "@nestjs/common": "^11.0.1",
 
     "@nestjs/config": "^4.0.0",
@@ -68,7 +70,13 @@
 
     "@nestjs/platform-express": "^11.0.1",
 
+    "@nestjs/platform-socket.io": "^11.1.15",
+
+    "@nestjs/serve-static": "^5.0.4",
+
     "@nestjs/swagger": "^11.0.0",
+
+    "@nestjs/websockets": "^11.1.15",
 
     "@prisma/client": "^5.6.0",
 
@@ -80,7 +88,7 @@
 
     "class-validator": "^0.14.0",
 
-    "firebase-admin": "^11.11.1",
+    "cloudinary": "^2.9.0",
 
     "ioredis": "^5.4.2",
 
@@ -95,6 +103,8 @@
     "reflect-metadata": "^0.2.2",
 
     "rxjs": "^7.8.1",
+
+    "socket.io": "^4.8.3",
 
     "swagger-ui-express": "^5.0.1",
 
@@ -133,6 +143,8 @@
     "@types/supertest": "^6.0.2",
 
     "@types/swagger-ui-express": "^4.1.6",
+
+    "@types/uuid": "^10.0.0",
 
     "eslint": "^9.18.0",
 

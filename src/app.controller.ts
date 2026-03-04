@@ -14,4 +14,9 @@ export class AppController {
   healthCheck(): object {
     return { status: 'ok', timestamp: new Date().toISOString() };
   }
+
+  @Get('user-recordings/test')
+  test() {
+    return { message: 'UserRecordings test' };
+  }
 }

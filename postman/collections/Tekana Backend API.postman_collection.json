@@ -1,0 +1,4612 @@
+{
+  "info": {
+    "_postman_id": "4a214739-749b-4787-8f7b-079672e06fc9",
+    "name": "Tekana Backend API",
+    "description": "``` latex\n  Comprehensive API documentation for Tekana Safety & Rescue Platform.\n  Supports JWT authentication for secure endpoints.\n\n ```",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "health",
+          "item": [
+            {
+              "name": "App Controller health Check",
+              "id": "5b032361-da99-46f5-88b6-e12f2992469f",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "health"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "11fbf709-cbba-420f-b1c4-501ad2e36fb9",
+                  "name": "Untitled Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/health",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "health"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "id": "edc5b5d0-c115-40c7-9004-011d24074f75"
+        },
+        {
+          "name": "auth",
+          "item": [
+            {
+              "name": "register",
+              "item": [
+                {
+                  "name": "Register a new user",
+                  "id": "2885a7dd-84fd-4b34-8b2d-f7c8fd3a90e0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"phone\": \"+250788123456\",\n  \"name\": \"John Doe\",\n  \"role\": \"CITIZEN\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "register"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "53f8a04f-cc2f-4680-a0ac-9bc7dda1b1d1",
+                      "name": "User successfully registered",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\",\n  \"name\": \"John Doe\",\n  \"role\": \"CITIZEN\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/register",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "register"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"user\": {\n    \"phone\": \"+250788123456\",\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"role\": \"CITIZEN\",\n    \"isVerified\": true\n  },\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expiresIn\": \"7d\"\n}"
+                    },
+                    {
+                      "id": "6731ea98-e0e6-45b9-ba19-bdf2a6c2f642",
+                      "name": "User already exists",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\",\n  \"name\": \"John Doe\",\n  \"role\": \"CITIZEN\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/register",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "register"
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "96f66796-92bb-4733-8b46-74b9b38721d4"
+            },
+            {
+              "name": "login",
+              "item": [
+                {
+                  "name": "Login user",
+                  "id": "48cff0c1-7774-40d9-92ef-f7324c669467",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"phone\": \"+250788123456\",\n  \"password\": \"password123\",\n  \"otp\": \"123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/login",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "e932544f-ee1b-4550-a7b1-bf455b025938",
+                      "name": "Login successful",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\",\n  \"password\": \"password123\",\n  \"otp\": \"123456\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"user\": {\n    \"phone\": \"+250788123456\",\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"role\": \"CITIZEN\",\n    \"isVerified\": true\n  },\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expiresIn\": \"7d\"\n}"
+                    },
+                    {
+                      "id": "c9750c78-7a55-4156-9486-4ace2bdebcd8",
+                      "name": "Invalid credentials",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\",\n  \"password\": \"password123\",\n  \"otp\": \"123456\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "8f0bc23a-7a0d-4457-be9c-fc251028c770"
+            },
+            {
+              "name": "send-otp",
+              "item": [
+                {
+                  "name": "Send OTP to phone number",
+                  "id": "fba4572f-88b9-44d7-a2af-d9f85af9514c",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"phone\": \"+250788123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/send-otp",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "send-otp"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "33115c9b-834e-4a89-8e51-c1e4e1858a67",
+                      "name": "OTP sent successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/send-otp",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "send-otp"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "9b22cab1-4b3d-446c-a5e2-ea83a3ed3242",
+                      "name": "User not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/send-otp",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "send-otp"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "398008bb-582b-4050-b81b-bf00dfc8d3b9"
+            },
+            {
+              "name": "verify-otp",
+              "item": [
+                {
+                  "name": "Verify OTP and login",
+                  "id": "8ae33549-9b48-4659-a1bb-8480b4964349",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"phone\": \"+250788123456\",\n  \"otp\": \"123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/verify-otp",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "verify-otp"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "4cc5660d-183d-4865-bfeb-479be21a1377",
+                      "name": "OTP verified successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\",\n  \"otp\": \"123456\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/verify-otp",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "verify-otp"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"user\": {\n    \"phone\": \"+250788123456\",\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"role\": \"CITIZEN\",\n    \"isVerified\": true\n  },\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expiresIn\": \"7d\"\n}"
+                    },
+                    {
+                      "id": "3aac6a57-476a-4389-84c2-a1a6d126282a",
+                      "name": "Invalid OTP",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"phone\": \"+250788123456\",\n  \"otp\": \"123456\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/verify-otp",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "verify-otp"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "d8227ba4-cf94-46fd-86bf-0d4544b2f7ab"
+            },
+            {
+              "name": "refresh",
+              "item": [
+                {
+                  "name": "Refresh JWT token",
+                  "id": "9b31d641-c7a3-4c2a-810e-1be391837ef4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/refresh",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "refresh"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "f542f586-e9d7-470a-8e21-2efe9e21e163",
+                      "name": "Token refreshed successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/refresh",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "refresh"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"user\": {\n    \"phone\": \"+250788123456\",\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"role\": \"CITIZEN\",\n    \"isVerified\": true\n  },\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expiresIn\": \"7d\"\n}"
+                    }
+                  ]
+                }
+              ],
+              "id": "9b9763b9-afee-4a66-98f7-a5785b62bff0"
+            },
+            {
+              "name": "logout",
+              "item": [
+                {
+                  "name": "Logout user",
+                  "id": "aa856f02-0a23-4c13-82ad-c5ad80738fda",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/logout",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "logout"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "00fc6a7a-f266-4dda-b05c-42690fe7dd1c",
+                      "name": "Logout successful",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/logout",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "logout"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "841ef5cf-8bfa-404b-adf0-3505b3c253aa"
+            },
+            {
+              "name": "profile",
+              "item": [
+                {
+                  "name": "Get current user profile",
+                  "id": "476f22ae-f222-44a6-bbb0-df170e462ee4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/profile",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "profile"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "ec571d97-cca2-4070-b26e-689992589b9e",
+                      "name": "Profile retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "bc1c34b0-5611-46fc-82d8-8be2de7db379"
+            }
+          ],
+          "id": "72e8daf3-76ea-4849-83e3-e78923bb09ac"
+        },
+        {
+          "name": "users",
+          "item": [
+            {
+              "name": "responders",
+              "item": [
+                {
+                  "name": "Get all active community responders",
+                  "id": "22bf6e3e-62b2-46d9-9fa4-5b4a65032283",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users/responders",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users",
+                        "responders"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "f7e84392-9450-449a-96c0-1977a940445b",
+                      "name": "Responders retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/responders",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            "responders"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "ed538397-ab85-4270-9ff1-7d4b5368fed8"
+            },
+            {
+              "name": "search",
+              "item": [
+                {
+                  "name": "Search users by name, phone, or email",
+                  "id": "5cd4eda1-f4bf-4bab-adca-8517e2d7a98a",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users/search?q=string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users",
+                        "search"
+                      ],
+                      "query": [
+                        {
+                          "description": "Search query",
+                          "key": "q",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "d6c42fd2-38c8-41a4-bed7-474aef463b68",
+                      "name": "Search results retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/search?q=string",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            "search"
+                          ],
+                          "query": [
+                            {
+                              "description": "Search query",
+                              "key": "q",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "4deeda3b-8ef9-45b9-9b03-cd9a9a1cc0fb"
+            },
+            {
+              "name": "role",
+              "item": [
+                {
+                  "name": "{role}",
+                  "item": [
+                    {
+                      "name": "Get users by role",
+                      "id": "b4ac3335-10a7-459c-a83d-7cf873a040f5",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/role/:role",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            "role",
+                            ":role"
+                          ],
+                          "variable": [
+                            {
+                              "key": "role",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "7324a539-67aa-4e73-9edb-2900278e98ff",
+                          "name": "Users retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/role/:role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                "role",
+                                ":role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "role",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "f1908c2c-bc87-489d-a7ae-df29c0eabd36"
+                }
+              ],
+              "id": "2f98d985-e6c7-4de1-859e-be372b6d0ef4"
+            },
+            {
+              "name": "profile",
+              "item": [
+                {
+                  "name": "Get current user profile",
+                  "id": "464d00b5-115b-481a-a873-3875c92ee948",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users/profile",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users",
+                        "profile"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "7a449ae4-0c89-43c2-a1b5-6dc70a00ba2e",
+                      "name": "Profile retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "1e2ecf46-faec-426d-a74d-fdd7b492b7ea"
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "deactivate",
+                  "item": [
+                    {
+                      "name": "Deactivate user account",
+                      "id": "87e84bba-e02a-4fdc-814e-b5c3a377c393",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id/deactivate",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id",
+                            "deactivate"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "8487627e-aff9-4d6b-97e8-90fa25406ab2",
+                          "name": "User deactivated successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/:id/deactivate",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                ":id",
+                                "deactivate"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "3caf0704-be69-4eaa-8084-1b5ac7364882"
+                },
+                {
+                  "name": "activate",
+                  "item": [
+                    {
+                      "name": "Activate user account",
+                      "id": "8ce195e9-097f-4c78-911c-ded78f3c16d5",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id/activate",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id",
+                            "activate"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "ce317437-1983-42ad-a641-db3c11acee6d",
+                          "name": "User activated successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/:id/activate",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                ":id",
+                                "activate"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "a34832b6-c38a-4fb7-b52d-2b04d974690b"
+                },
+                {
+                  "name": "role",
+                  "item": [
+                    {
+                      "name": "Update user role",
+                      "id": "f56f0d28-84c8-4edc-852b-0776f2f4a1d1",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id/role",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id",
+                            "role"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "aeefda4c-ba51-46e1-9bce-6fabe66cb93e",
+                          "name": "User role updated successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/:id/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                ":id",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "215535dc-4076-459d-b713-c7dc7b276660"
+                },
+                {
+                  "name": "trusted-contacts",
+                  "item": [
+                    {
+                      "name": "{contactId}",
+                      "item": [
+                        {
+                          "name": "Remove trusted contact",
+                          "id": "53e53655-2bf5-49c0-8041-7558687a0d89",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "DELETE",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/:id/trusted-contacts/:contactId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                ":id",
+                                "trusted-contacts",
+                                ":contactId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                },
+                                {
+                                  "key": "contactId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "463c7426-fcfe-494b-bde5-802d6d0de002",
+                              "name": "Trusted contact removed successfully",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/users/:id/trusted-contacts/:contactId",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "users",
+                                    ":id",
+                                    "trusted-contacts",
+                                    ":contactId"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id",
+                                      "value": "string"
+                                    },
+                                    {
+                                      "key": "contactId",
+                                      "value": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ],
+                      "id": "71330e8d-93c2-4a63-9c91-bb5ab392db66"
+                    },
+                    {
+                      "name": "Add trusted contact for user",
+                      "id": "c22fca70-005e-4477-ab53-4acfe9dbab56",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"contactName\": \"Jane Doe\",\n  \"contactPhone\": \"+250788654321\",\n  \"isPrimary\": false,\n  \"contactEmail\": \"jane.doe@example.com\",\n  \"relationship\": \"Sister\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id/trusted-contacts",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id",
+                            "trusted-contacts"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "d4d646fd-e2fd-405b-8a05-cb8a20656ee0",
+                          "name": "Trusted contact added successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"contactName\": \"Jane Doe\",\n  \"contactPhone\": \"+250788654321\",\n  \"isPrimary\": false,\n  \"contactEmail\": \"jane.doe@example.com\",\n  \"relationship\": \"Sister\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/:id/trusted-contacts",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                ":id",
+                                "trusted-contacts"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Get user trusted contacts",
+                      "id": "645a91c1-ab94-4c99-bfb3-4b14ecec4a2e",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id/trusted-contacts",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id",
+                            "trusted-contacts"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "60de5aaf-107c-40db-af24-fe46903cd918",
+                          "name": "Trusted contacts retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/users/:id/trusted-contacts",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "users",
+                                ":id",
+                                "trusted-contacts"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "29db005d-84c8-4e14-b1d7-3537e645e454"
+                },
+                {
+                  "name": "Get user by ID",
+                  "id": "9babe742-94dc-4c9c-98fc-abca8bb36bb1",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "13810b5a-b7e5-4734-b716-8414f114a5db",
+                      "name": "User retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "1a6fc172-b613-4deb-8534-297a1a4cb2a9",
+                      "name": "User not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Update user information",
+                  "id": "acbde161-4909-4968-802a-197e640bc421",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"newpassword123\",\n  \"role\": \"COMMUNITY_RESPONDER\",\n  \"isVerified\": true,\n  \"isActive\": true\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "0b49bab9-ef8a-43f7-93e9-fd65d8b09239",
+                      "name": "User updated successfully",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"newpassword123\",\n  \"role\": \"COMMUNITY_RESPONDER\",\n  \"isVerified\": true,\n  \"isActive\": true\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "1adda1bd-d512-4f34-ac22-70e49f094d95",
+                      "name": "User not found",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"newpassword123\",\n  \"role\": \"COMMUNITY_RESPONDER\",\n  \"isVerified\": true,\n  \"isActive\": true\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Delete user",
+                  "id": "0aaf77d8-45ac-40d3-81fa-35847eab4f94",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "49bb4ae8-8e96-485c-95b4-2805bf8e2cc9",
+                      "name": "User deleted successfully",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "494f2a76-9f6e-4226-9dae-4b04d7e6643c",
+                      "name": "User not found",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/users/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "users",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "4a2e7303-4de9-48f0-85ff-46ba714c6a69"
+            },
+            {
+              "name": "Create a new user",
+              "id": "26c9546a-e8d9-41f6-b411-b34ec2fe667f",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "d058cfbc-7402-4d73-af66-7ef792956761",
+                  "name": "User created successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "id": "f89cf554-f82a-468c-afdc-11982dec06a4",
+                  "name": "User already exists",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users"
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Get all users with pagination",
+              "id": "220ba5da-84bd-4787-9691-8dd14c749fc5",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/users?page=151.5107441915675&limit=151.5107441915675&role=COMMUNITY_RESPONDER&search=string",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "151.5107441915675"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "151.5107441915675"
+                    },
+                    {
+                      "key": "role",
+                      "value": "COMMUNITY_RESPONDER"
+                    },
+                    {
+                      "key": "search",
+                      "value": "string"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "7bf8bc2e-09a3-4975-a39c-23acd293fc6f",
+                  "name": "Users retrieved successfully",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/users?page=151.5107441915675&limit=151.5107441915675&role=COMMUNITY_RESPONDER&search=string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "users"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "151.5107441915675"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "151.5107441915675"
+                        },
+                        {
+                          "key": "role",
+                          "value": "COMMUNITY_RESPONDER"
+                        },
+                        {
+                          "key": "search",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "id": "a8c76dc2-504b-455b-b804-7b13ecacd61e"
+        },
+        {
+          "name": "incidents",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "status",
+                  "item": [
+                    {
+                      "name": "Update incident status and severity",
+                      "id": "1a6a1e88-abe2-4886-bab1-a3aabb07723c",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"severity\": \"MEDIUM\",\n  \"notes\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/incidents/:id/status",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "incidents",
+                            ":id",
+                            "status"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "2b42aedf-4e7c-4fc5-9628-36b4633357bf",
+                          "name": "Incident status updated successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"severity\": \"MEDIUM\",\n  \"notes\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/incidents/:id/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "incidents",
+                                ":id",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "11c1eccd-cc43-488c-aecf-8aa6f9c51f35"
+                },
+                {
+                  "name": "responders",
+                  "item": [
+                    {
+                      "name": "Assign a responder to an incident",
+                      "id": "4e3d0182-bf62-487f-a540-7537ad1d7da2",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"responderId\": \"string\",\n  \"notes\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/incidents/:id/responders",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "incidents",
+                            ":id",
+                            "responders"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "7faf64ac-4f4a-4e40-8ac3-0daabf9f1312",
+                          "name": "Responder assigned successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"responderId\": \"string\",\n  \"notes\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/incidents/:id/responders",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "incidents",
+                                ":id",
+                                "responders"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "4f578351-9072-4341-b706-12746b59b960"
+                },
+                {
+                  "name": "request-emergency-service",
+                  "item": [
+                    {
+                      "name": "Request emergency service (ambulance or police) for an incident",
+                      "id": "af74c035-b4f1-4fb5-a56d-506dcba00576",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/incidents/:id/request-emergency-service",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "incidents",
+                            ":id",
+                            "request-emergency-service"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "2142fdca-4597-401f-abde-c375187491f8",
+                          "name": "Emergency service request forwarded",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/incidents/:id/request-emergency-service",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "incidents",
+                                ":id",
+                                "request-emergency-service"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "17606b17-0d36-4510-b377-660ccb03c9ca"
+                },
+                {
+                  "name": "Get incident details by ID",
+                  "id": "9077084e-8de1-4e9b-9b0a-1782a4a1efce",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/incidents/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "incidents",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "6ff49508-6e74-4ab2-9cc1-10849ec12e50",
+                      "name": "Incident retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/incidents/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "incidents",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "8844c1bd-0a8d-4117-9d70-0d70c0d5cc92",
+                      "name": "Incident not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/incidents/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "incidents",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "a4b29a7f-031d-4787-9c78-24ffc540a381"
+            },
+            {
+              "name": "Create a new incident (SOS alert)",
+              "id": "31e509fb-3e31-4bfc-9c77-6bedd45fa662",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"HARASSMENT\",\n  \"locationLat\": -1.9441,\n  \"locationLng\": 30.0619,\n  \"severity\": \"MEDIUM\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"locationAddress\": \"string\",\n  \"isSilentSOS\": false,\n  \"isOfflineAlert\": false,\n  \"pathGuardSessionId\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/incidents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "incidents"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "8ea4b87c-0b33-4fd3-a127-b21058f0f018",
+                  "name": "Incident created successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"type\": \"HARASSMENT\",\n  \"locationLat\": -1.9441,\n  \"locationLng\": 30.0619,\n  \"severity\": \"MEDIUM\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"locationAddress\": \"string\",\n  \"isSilentSOS\": false,\n  \"isOfflineAlert\": false,\n  \"pathGuardSessionId\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/incidents",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "incidents"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Retrieve incidents with optional filters",
+              "id": "d08f6072-9be7-48ab-a3a8-1aa38c729ce6",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/incidents?status=CANCELLED&type=ACCIDENT&severity=HIGH&isSilentSOS=false&isOfflineAlert=false&userId=string&responderId=string&skip=151.5107441915675&take=151.5107441915675",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "incidents"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by incident status",
+                      "key": "status",
+                      "value": "CANCELLED"
+                    },
+                    {
+                      "description": "Filter by incident type",
+                      "key": "type",
+                      "value": "ACCIDENT"
+                    },
+                    {
+                      "description": "Filter by severity",
+                      "key": "severity",
+                      "value": "HIGH"
+                    },
+                    {
+                      "description": "Filter to silent SOS incidents",
+                      "key": "isSilentSOS",
+                      "value": "false"
+                    },
+                    {
+                      "description": "Filter to offline alerts",
+                      "key": "isOfflineAlert",
+                      "value": "false"
+                    },
+                    {
+                      "description": "Filter by user ID",
+                      "key": "userId",
+                      "value": "string"
+                    },
+                    {
+                      "description": "Filter by responder ID",
+                      "key": "responderId",
+                      "value": "string"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "151.5107441915675"
+                    },
+                    {
+                      "key": "take",
+                      "value": "151.5107441915675"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "0e76afac-de6b-4a16-adf5-3f4bbc1117d9",
+                  "name": "Incidents retrieved successfully",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/incidents?status=CANCELLED&type=ACCIDENT&severity=HIGH&isSilentSOS=false&isOfflineAlert=false&userId=string&responderId=string&skip=151.5107441915675&take=151.5107441915675",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "incidents"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by incident status",
+                          "key": "status",
+                          "value": "CANCELLED"
+                        },
+                        {
+                          "description": "Filter by incident type",
+                          "key": "type",
+                          "value": "ACCIDENT"
+                        },
+                        {
+                          "description": "Filter by severity",
+                          "key": "severity",
+                          "value": "HIGH"
+                        },
+                        {
+                          "description": "Filter to silent SOS incidents",
+                          "key": "isSilentSOS",
+                          "value": "false"
+                        },
+                        {
+                          "description": "Filter to offline alerts",
+                          "key": "isOfflineAlert",
+                          "value": "false"
+                        },
+                        {
+                          "description": "Filter by user ID",
+                          "key": "userId",
+                          "value": "string"
+                        },
+                        {
+                          "description": "Filter by responder ID",
+                          "key": "responderId",
+                          "value": "string"
+                        },
+                        {
+                          "key": "skip",
+                          "value": "151.5107441915675"
+                        },
+                        {
+                          "key": "take",
+                          "value": "151.5107441915675"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "id": "b67155fe-697f-4e79-9a17-fd29a6b753d5"
+        },
+        {
+          "name": "path-guard",
+          "item": [
+            {
+              "name": "start",
+              "item": [
+                {
+                  "name": "Start a new PathGuard session",
+                  "id": "58ac342d-5525-4539-82d6-068d33d49a1a",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"startLocationLat\": 3089.9809291551205,\n  \"startLocationLng\": 2603.864573863339,\n  \"destinationLat\": 1234.021439720352,\n  \"destinationLng\": 7042.799551660608,\n  \"deviationThreshold\": 50,\n  \"immobilityTimeout\": 300\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/path-guard/start",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "path-guard",
+                        "start"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "beaa53da-7790-4236-bd4a-6543eb11acd9",
+                      "name": "PathGuard session started successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"startLocationLat\": 3089.9809291551205,\n  \"startLocationLng\": 2603.864573863339,\n  \"destinationLat\": 1234.021439720352,\n  \"destinationLng\": 7042.799551660608,\n  \"deviationThreshold\": 50,\n  \"immobilityTimeout\": 300\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/path-guard/start",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "path-guard",
+                            "start"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "cfc36808-dd36-47d0-a351-7619342c8cce"
+            },
+            {
+              "name": "active",
+              "item": [
+                {
+                  "name": "Get the active PathGuard session for current user",
+                  "id": "8ba2e51c-39c7-4bad-a795-1b4d7a4c7db8",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/path-guard/active",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "path-guard",
+                        "active"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "60c2bc75-2dfa-4e53-be3d-e9cfb2841188",
+                      "name": "Active session details",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/path-guard/active",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "path-guard",
+                            "active"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "21849e49-1687-407e-b888-70d4dcf185a0"
+            },
+            {
+              "name": "{sessionId}",
+              "item": [
+                {
+                  "name": "location",
+                  "item": [
+                    {
+                      "name": "Report current location for an active PathGuard session",
+                      "id": "22203724-8773-43a9-bc68-4f4465f2ab77",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"latitude\": 8383.777322943848,\n  \"longitude\": 2371.4763865946643,\n  \"speed\": 3110.6734826232273,\n  \"heading\": 3137.3398450619084,\n  \"accuracy\": 4513.3614042238105\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/path-guard/:sessionId/location",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "path-guard",
+                            ":sessionId",
+                            "location"
+                          ],
+                          "variable": [
+                            {
+                              "key": "sessionId",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "db7ceec5-993c-404f-8fae-1acaa043119c",
+                          "name": "Location update recorded. Returns whether an emergency was triggered.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"latitude\": 8383.777322943848,\n  \"longitude\": 2371.4763865946643,\n  \"speed\": 3110.6734826232273,\n  \"heading\": 3137.3398450619084,\n  \"accuracy\": 4513.3614042238105\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/path-guard/:sessionId/location",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "path-guard",
+                                ":sessionId",
+                                "location"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "sessionId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "34ef1c10-d1b0-4a91-beaf-a4bd7085de85"
+                },
+                {
+                  "name": "complete",
+                  "item": [
+                    {
+                      "name": "Complete or cancel an active PathGuard session",
+                      "id": "87a331d2-6eeb-4c4c-b6a7-93be10ef0e9c",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/path-guard/:sessionId/complete",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "path-guard",
+                            ":sessionId",
+                            "complete"
+                          ],
+                          "variable": [
+                            {
+                              "key": "sessionId",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "0de600df-e9f9-40e9-9068-ff0f550ddfdf",
+                          "name": "PathGuard session completed successfully",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/path-guard/:sessionId/complete",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "path-guard",
+                                ":sessionId",
+                                "complete"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "sessionId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "1a3c95b5-b543-48e9-b03f-04471d4a7dd1"
+                }
+              ],
+              "id": "67ad05f4-675d-4f35-a82a-22d78b0e143e"
+            }
+          ],
+          "id": "c2299b16-7c57-418f-a48f-512fefa5ba23"
+        },
+        {
+          "name": "danger-zones",
+          "item": [
+            {
+              "name": "aggregated",
+              "item": [
+                {
+                  "name": "Get aggregated danger zones for mapping",
+                  "id": "960763ce-e4e3-4953-a51a-bdbd3e608f37",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/danger-zones/aggregated",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "danger-zones",
+                        "aggregated"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "464628aa-7e7c-43e0-b181-ccc809f497d0",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/danger-zones/aggregated",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "danger-zones",
+                            "aggregated"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "420523af-f5ae-4c57-a60b-5e2d25bfe62b"
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get a specific danger zone",
+                  "id": "a7b1c79c-2c7b-4c9b-b197-96e549a120fd",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/danger-zones/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "danger-zones",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "050bb659-c4fb-4e0a-b7a9-cdf3bee5d64c",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/danger-zones/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "danger-zones",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Update a danger zone",
+                  "id": "62de4a53-ffe1-4ab0-8c25-ade18a23f26c",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PATCH",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/danger-zones/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "danger-zones",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "c156d851-bdfa-4a37-ac7c-3677befd8698",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/danger-zones/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "danger-zones",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Delete a danger zone",
+                  "id": "2c120bf1-948f-47dc-ab38-67cc5b38e4a5",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/danger-zones/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "danger-zones",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "672abd54-714d-4560-b2ae-364b5dcd8a4a",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/danger-zones/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "danger-zones",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "148db827-0ffc-4cf0-af66-94b8f4319571"
+            },
+            {
+              "name": "Report a new danger zone",
+              "id": "00b077c6-5985-4785-a4ed-7715bf72f0bd",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locationLat\": 4425.595768833039,\n  \"locationLng\": 9884.902384304629,\n  \"dangerType\": \"HIGH_CRIME_AREA\",\n  \"description\": \"string\",\n  \"locationAddress\": \"string\",\n  \"severity\": \"MEDIUM\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/danger-zones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "danger-zones"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "1b94f07c-7bf2-4345-988a-7e24aea45203",
+                  "name": "Danger zone reported successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"locationLat\": 4425.595768833039,\n  \"locationLng\": 9884.902384304629,\n  \"dangerType\": \"HIGH_CRIME_AREA\",\n  \"description\": \"string\",\n  \"locationAddress\": \"string\",\n  \"severity\": \"MEDIUM\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/danger-zones",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "danger-zones"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Get danger zones with optional filters",
+              "id": "1842acdc-49e0-4ae1-bf9d-e27575256cd0",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/danger-zones?dangerType=CONSTRUCTION_ZONE&severity=LOW&userId=string&page=151.5107441915675&limit=151.5107441915675",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "danger-zones"
+                  ],
+                  "query": [
+                    {
+                      "key": "dangerType",
+                      "value": "CONSTRUCTION_ZONE"
+                    },
+                    {
+                      "key": "severity",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "string"
+                    },
+                    {
+                      "key": "page",
+                      "value": "151.5107441915675"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "151.5107441915675"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "2f73e93c-6392-4ed0-b466-5f940dfc8a97",
+                  "name": "Untitled Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/danger-zones?dangerType=CONSTRUCTION_ZONE&severity=LOW&userId=string&page=151.5107441915675&limit=151.5107441915675",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "danger-zones"
+                      ],
+                      "query": [
+                        {
+                          "key": "dangerType",
+                          "value": "CONSTRUCTION_ZONE"
+                        },
+                        {
+                          "key": "severity",
+                          "value": "LOW"
+                        },
+                        {
+                          "key": "userId",
+                          "value": "string"
+                        },
+                        {
+                          "key": "page",
+                          "value": "151.5107441915675"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "151.5107441915675"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "id": "61b0b0aa-a057-40ab-a63b-f2960986e069"
+        },
+        {
+          "name": "responders",
+          "item": [
+            {
+              "name": "profile",
+              "item": [
+                {
+                  "name": "verify",
+                  "item": [
+                    {
+                      "name": "Verify responder profile (admin only)",
+                      "id": "a9acbc22-17e9-409f-b419-e52b5e10e16a",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/responders/profile/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "responders",
+                            "profile",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "b7a90a7d-6bd6-4653-9485-288662ae8488",
+                          "name": "Untitled Response",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/responders/profile/verify",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "responders",
+                                "profile",
+                                "verify"
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "787dcc19-b3d1-49a6-ba07-c77ea98e47f8"
+                },
+                {
+                  "name": "Get current user responder profile",
+                  "id": "3dcf1424-0465-42b6-9002-4d31943be88b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/responders/profile",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "responders",
+                        "profile"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "6da31ee0-b089-4662-af96-700595b53ece",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/responders/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "responders",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Update responder profile",
+                  "id": "04c25b3b-e81e-485f-9aec-a4efa6f751d2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"isAvailable\": false,\n  \"currentLocationLat\": 8527.211131286123,\n  \"currentLocationLng\": 255.46260815920485,\n  \"responseRadius\": 8007.382462498882,\n  \"skills\": [\n    \"string\",\n    \"string\"\n  ],\n  \"certifications\": [\n    \"string\",\n    \"string\"\n  ],\n  \"verificationDocument\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/responders/profile",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "responders",
+                        "profile"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "c8230bf0-4242-4ed8-9131-5a0bcb013b4a",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"isAvailable\": false,\n  \"currentLocationLat\": 8527.211131286123,\n  \"currentLocationLng\": 255.46260815920485,\n  \"responseRadius\": 8007.382462498882,\n  \"skills\": [\n    \"string\",\n    \"string\"\n  ],\n  \"certifications\": [\n    \"string\",\n    \"string\"\n  ],\n  \"verificationDocument\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/responders/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "responders",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "053484ad-19ea-4d82-8c4e-5fa748793573"
+            },
+            {
+              "name": "actions",
+              "item": [
+                {
+                  "name": "{actionId}",
+                  "item": [
+                    {
+                      "name": "complete",
+                      "item": [
+                        {
+                          "name": "Complete a responder action",
+                          "id": "8b2c1577-941d-420f-ab10-9326562650fd",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/responders/actions/:actionId/complete",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "responders",
+                                "actions",
+                                ":actionId",
+                                "complete"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "actionId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "3ccc9cf6-d35c-4f64-9bb6-39d62367f924",
+                              "name": "Untitled Response",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/responders/actions/:actionId/complete",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "responders",
+                                    "actions",
+                                    ":actionId",
+                                    "complete"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "actionId",
+                                      "value": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Created",
+                              "code": 201,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ],
+                      "id": "f138ba24-d0c0-4ce6-8110-98f674698131"
+                    }
+                  ],
+                  "id": "536db6b7-9268-41cb-a719-baf38b7298da"
+                },
+                {
+                  "name": "Get responder actions",
+                  "id": "6c75c0ac-8a6c-4a8b-bca0-edc12004f171",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/responders/actions?incidentId=string&status=IN_PROGRESS",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "responders",
+                        "actions"
+                      ],
+                      "query": [
+                        {
+                          "key": "incidentId",
+                          "value": "string"
+                        },
+                        {
+                          "key": "status",
+                          "value": "IN_PROGRESS"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "2ef1e6ac-c821-4c15-ac1a-3a92861e6ef1",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/responders/actions?incidentId=string&status=IN_PROGRESS",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "responders",
+                            "actions"
+                          ],
+                          "query": [
+                            {
+                              "key": "incidentId",
+                              "value": "string"
+                            },
+                            {
+                              "key": "status",
+                              "value": "IN_PROGRESS"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "4c35ba7e-bef0-4fb1-aeab-d7882dd56643"
+            },
+            {
+              "name": "nearby-incidents",
+              "item": [
+                {
+                  "name": "Get nearby incidents for response",
+                  "id": "a8b67311-132c-4239-8da0-463816b12afc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/responders/nearby-incidents",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "responders",
+                        "nearby-incidents"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "ccf39709-8166-479d-97c8-319ee1ecd313",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/responders/nearby-incidents",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "responders",
+                            "nearby-incidents"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "12e5be73-a346-45ef-ae38-759efafe982d"
+            },
+            {
+              "name": "incidents",
+              "item": [
+                {
+                  "name": "{incidentId}",
+                  "item": [
+                    {
+                      "name": "resolve",
+                      "item": [
+                        {
+                          "name": "Resolve an incident (for assigned responders)",
+                          "id": "114d8625-4f65-474d-92ad-625e093e4f78",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/responders/incidents/:incidentId/resolve",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "responders",
+                                "incidents",
+                                ":incidentId",
+                                "resolve"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "incidentId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "response": [
+                            {
+                              "id": "256da1d6-6354-41a8-aaeb-6cb913bc458d",
+                              "name": "Untitled Response",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/responders/incidents/:incidentId/resolve",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "responders",
+                                    "incidents",
+                                    ":incidentId",
+                                    "resolve"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "incidentId",
+                                      "value": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Created",
+                              "code": 201,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "body": ""
+                            }
+                          ]
+                        }
+                      ],
+                      "id": "e1b19785-d61f-4db6-a4e3-06d8c54df067"
+                    }
+                  ],
+                  "id": "2a7565ab-de18-4ccf-b018-69945e8d2f6f"
+                }
+              ],
+              "id": "ba115445-8a5a-4094-923c-8b467d58e37d"
+            }
+          ],
+          "id": "a1347f4b-528e-41b3-a1a8-006b92de2e71"
+        },
+        {
+          "name": "device-tokens",
+          "item": [
+            {
+              "name": "{token}",
+              "item": [
+                {
+                  "name": "Deactivate a device token",
+                  "id": "e57c7192-fef9-4dc7-96c5-d3bafca40988",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/device-tokens/:token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "device-tokens",
+                        ":token"
+                      ],
+                      "variable": [
+                        {
+                          "key": "token",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "96019f98-20dc-4223-87ae-9ece37fe7bed",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/device-tokens/:token",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "device-tokens",
+                            ":token"
+                          ],
+                          "variable": [
+                            {
+                              "key": "token",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "271c9f18-33f6-463b-8dcc-7139022eedf6"
+            },
+            {
+              "name": "Register a device token for push notifications",
+              "id": "7eaa49c7-d56d-4ae7-9366-fef212f45921",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"string\",\n  \"deviceType\": \"WEB\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/device-tokens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device-tokens"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "ac0f9b64-7e39-491e-abe1-4e3389aa5a72",
+                  "name": "Device token registered successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"token\": \"string\",\n  \"deviceType\": \"WEB\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/device-tokens",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "device-tokens"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Get active device tokens for current user",
+              "id": "64eaac08-6961-4d9b-b87b-e0d950325ac7",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/device-tokens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device-tokens"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "50f9d662-56c8-4e06-b783-ac7281b65277",
+                  "name": "Untitled Response",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/device-tokens",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "device-tokens"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "id": "014da129-772e-45fa-af78-47f2f61b52aa"
+        },
+        {
+          "name": "media",
+          "item": [
+            {
+              "name": "upload",
+              "item": [
+                {
+                  "name": "{incidentId}",
+                  "item": [
+                    {
+                      "name": "Upload media file for an incident",
+                      "id": "ccf5ebae-0fdd-436f-b173-991c687237c1",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "multipart/form-data"
+                          }
+                        ],
+                        "body": {
+                          "mode": "formdata",
+                          "formdata": [
+                            {
+                              "description": "Media type",
+                              "key": "type",
+                              "value": "IMAGE",
+                              "type": "text"
+                            },
+                            {
+                              "description": "File name",
+                              "key": "fileName",
+                              "value": "string",
+                              "type": "text"
+                            },
+                            {
+                              "description": "Duration in seconds",
+                              "key": "duration",
+                              "value": "string",
+                              "type": "text"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/media/upload/:incidentId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "media",
+                            "upload",
+                            ":incidentId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "incidentId",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "c3309d60-d061-4df6-9ce4-f067d06e07bf",
+                          "name": "Media uploaded successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "multipart/form-data"
+                              }
+                            ],
+                            "body": {
+                              "mode": "formdata",
+                              "formdata": [
+                                {
+                                  "description": "Media type",
+                                  "key": "type",
+                                  "value": "IMAGE",
+                                  "type": "text"
+                                },
+                                {
+                                  "description": "File name",
+                                  "key": "fileName",
+                                  "value": "string",
+                                  "type": "text"
+                                },
+                                {
+                                  "description": "Duration in seconds",
+                                  "key": "duration",
+                                  "value": "string",
+                                  "type": "text"
+                                }
+                              ]
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/media/upload/:incidentId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "media",
+                                "upload",
+                                ":incidentId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "incidentId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "fd6f2d60-b23e-40a1-bfd9-daf319ffb56a"
+                }
+              ],
+              "id": "c8db95ea-f563-4479-87b7-870c1854af44"
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get media file by ID",
+                  "id": "fcea6428-0d7e-443f-9548-7317a2ba4cfe",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/media/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "media",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "a0dad4dc-df50-4287-a993-164344e2acdd",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/media/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "media",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "1b434376-113d-4983-8ccf-7cadcf38cc8c"
+            },
+            {
+              "name": "incident",
+              "item": [
+                {
+                  "name": "{incidentId}",
+                  "item": [
+                    {
+                      "name": "Get all media for an incident",
+                      "id": "23552d66-a8af-41d3-8aa0-b100ba30fe08",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/media/incident/:incidentId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "media",
+                            "incident",
+                            ":incidentId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "incidentId",
+                              "value": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "5a2467a5-4c93-44d5-8c1d-f5859c8048e6",
+                          "name": "Untitled Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/media/incident/:incidentId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "media",
+                                "incident",
+                                ":incidentId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "incidentId",
+                                  "value": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "7b2362a9-20b8-4d06-b68d-7d98b9f155e7"
+                }
+              ],
+              "id": "04cb9293-32e7-4570-967f-914e941baf91"
+            }
+          ],
+          "id": "683921a1-d0a9-454e-9147-0ed1be7e09fd"
+        },
+        {
+          "name": "streaming",
+          "item": [
+            {
+              "name": "publish",
+              "item": [
+                {
+                  "name": "Streaming Controller on Publish",
+                  "id": "943d602a-150f-4199-98c6-8f1e57d67dca",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/streaming/publish",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "streaming",
+                        "publish"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "d936f795-ec78-498e-b555-602c949113c2",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/streaming/publish",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "streaming",
+                            "publish"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "8eb1a5c0-ffbd-4d7a-92ae-e59661626915"
+            },
+            {
+              "name": "publish_done",
+              "item": [
+                {
+                  "name": "Streaming Controller on Publish Done",
+                  "id": "040b8d45-584c-4e84-bcf3-4436faeb6179",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/streaming/publish_done",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "streaming",
+                        "publish_done"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "853f5720-507b-4c7c-9cb5-071b51ca56f9",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/streaming/publish_done",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "streaming",
+                            "publish_done"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "80267bb6-5fab-4e8c-ba55-3bb21b0692fc"
+            },
+            {
+              "name": "play",
+              "item": [
+                {
+                  "name": "Streaming Controller on Play",
+                  "id": "83749652-e91d-4847-af46-984d49c13ef8",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/streaming/play",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "streaming",
+                        "play"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "d8f839ba-26ba-44eb-b9c5-1807846559fe",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/streaming/play",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "streaming",
+                            "play"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "d49237c7-4315-4a5b-9c0c-2b01c323a97b"
+            },
+            {
+              "name": "play_done",
+              "item": [
+                {
+                  "name": "Streaming Controller on Play Done",
+                  "id": "231b0442-ee5a-4f25-b519-f260e9e454a2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/streaming/play_done",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "streaming",
+                        "play_done"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "b6cad4ef-4b79-4554-bba9-c5fd94aa8ed5",
+                      "name": "Untitled Response",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/streaming/play_done",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "streaming",
+                            "play_done"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "cc382ed9-0ad5-49a0-9055-4e9db051fd59"
+            }
+          ],
+          "id": "743016ad-957d-4191-bc01-77ab6f60127d"
+        },
+        {
+          "name": "App Controller get Hello",
+          "id": "8a6b698b-424e-4995-9f29-d0112a6608a4",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7848f2ed-fa56-4b64-bbfa-1b64073b445e",
+              "name": "Untitled Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ],
+      "id": "4f951e84-653e-4ac6-b24e-bbd8f729b5ee"
+    }
+  ],
+  "variable": [
+    {
+      "id": "d767ab85-1387-4b78-ba46-bd80459b2d67",
+      "key": "baseUrl",
+      "value": "http://localhost:3086"
+    },
+    {
+      "id": "12d966bd-8b82-4b82-95bf-83bacd51a433",
+      "key": "userID",
+      "value": ""
+    },
+    {
+      "id": "3441475b-67bb-4d74-8b6b-2e007a9d31be",
+      "key": "token",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "aaad5eae-c268-40fe-ae6f-71ec4c401ca6",
+      "key": "userIDtrustedcontact",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "581f4b7b-f92a-48c0-99ed-ee11d78229b7",
+      "key": "incidendId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "c3044414-f1dc-435e-bebc-13fd342c9e42",
+      "key": "Pathguardid",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "3b337710-1a0c-4ea1-97c1-e1c6d2cc3487",
+      "key": "DangerZoneID",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ import { UpdatePathGuardLocationDto } from './dto/update-path-guard-location.dto
 import { IncidentsService } from '../incidents/incidents.service';
 import { CreateIncidentDto } from '../incidents/dto/create-incident.dto';
 import { FcmService } from '../messaging/fcm.service';
+import { MapsService } from '../maps/maps.service';
 
 const EARTH_RADIUS_METERS = 6_371_000;
 
@@ -33,6 +34,7 @@ export class PathGuardService {
     private readonly configService: ConfigService,
     private readonly incidentsService: IncidentsService,
     private readonly fcmService: FcmService,
+    private readonly mapsService: MapsService,
   ) {}
 
   async startSession(userId: string, dto: StartPathGuardDto) {
@@ -203,6 +205,8 @@ export class PathGuardService {
       },
     });
 
+    const locationAddress = (await this.mapsService.reverseGeocode(latitude, longitude)) || undefined;
+
     const incidentPayload: CreateIncidentDto = {
       type: IncidentType.OTHER,
       severity: Severity.CRITICAL,
@@ -210,7 +214,7 @@ export class PathGuardService {
       description: reason,
       locationLat: latitude,
       locationLng: longitude,
-      locationAddress: undefined,
+      locationAddress,
       isSilentSOS: true,
       isOfflineAlert: false,
       pathGuardSessionId: session.id,
@@ -254,17 +258,17 @@ export class PathGuardService {
       return;
     }
 
-    await this.fcmService.sendToTokens(
-      registrationTokens,
-      {
-        title,
-        body: message,
-      },
-      {
-        notificationType: NotificationType.PATH_GUARD_ALERT,
-        incidentId,
-      },
-    );
+    // await this.fcmService.sendToTokens(
+    //   registrationTokens,
+    //   {
+    //     title,
+    //     body: message,
+    //   },
+    //   {
+    //     notificationType: NotificationType.PATH_GUARD_ALERT,
+    //     incidentId,
+    //   },
+    // );
   }
 
   private haversineDistanceMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {

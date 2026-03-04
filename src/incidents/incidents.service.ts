@@ -19,10 +19,11 @@ import { FilterIncidentsDto } from './dto/filter-incidents.dto';
 import { RequestEmergencyServiceDto } from './dto/request-emergency-service.dto';
 import { RabbitMQService } from '../messaging/rabbitmq.service';
 import { RedisService } from '../redis/redis.service';
-import { FcmService } from '../messaging/fcm.service';
+// import { FcmService } from '../messaging/fcm.service';
 import { SmsService } from '../sms/sms.service';
 import { AuditService } from '../audit/audit.service';
 import { EmailService } from '../email/email.service';
+import { MapsService } from '../maps/maps.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -33,10 +34,11 @@ export class IncidentsService {
     private prisma: PrismaService,
     private rabbitMQService: RabbitMQService,
     private redisService: RedisService,
-    private fcmService: FcmService,
+    // private fcmService: FcmService,
     private smsService: SmsService,
     private auditService: AuditService,
     private emailService: EmailService,
+    private mapsService: MapsService,
   ) {}
 
   async createIncident(userId: string, dto: CreateIncidentDto): Promise<Incident> {
@@ -50,6 +52,12 @@ export class IncidentsService {
       throw new NotFoundException('PathGuard session not found');
     }
 
+    // Auto-fill locationAddress if not provided
+    let locationAddress = dto.locationAddress;
+    if (!locationAddress) {
+      locationAddress = await this.mapsService.reverseGeocode(dto.locationLat, dto.locationLng) || `${dto.locationLat}, ${dto.locationLng}`;
+    }
+
     const incident = await this.prisma.incident.create({
       data: {
         userId,
@@ -59,7 +67,7 @@ export class IncidentsService {
         description: dto.description,
         locationLat: dto.locationLat,
         locationLng: dto.locationLng,
-        locationAddress: dto.locationAddress,
+        locationAddress,
         isSilentSOS: dto.isSilentSOS ?? undefined,
         isOfflineAlert: dto.isOfflineAlert ?? undefined,
         streamKey: uuidv4(),
@@ -115,10 +123,35 @@ export class IncidentsService {
     });
     if (userWithTrusted?.trustedContacts.length) {
       for (const contact of userWithTrusted.trustedContacts) {
+        const message = `Emergency Alert: Incident reported by ${userWithTrusted.name} at ${incident.locationAddress || 'unknown location'}. Please check for updates.`;
+        console.log(`[DEV] Sending SMS to ${contact.name} (${contact.phone}): ${message}`);
         await this.smsService.sendSms(
-          contact.contactPhone,
-          `Emergency Alert: Incident reported by ${userWithTrusted.name}. Please check for updates.`,
+          contact.phone,
+          message,
         );
+
+        // Check if trusted contact has a Tekana account and send in-app notification
+        const contactUser = await this.prisma.user.findUnique({
+          where: { phone: contact.phone },
+        });
+        if (contactUser) {
+          const inAppNotification = {
+            userId: contactUser.id,
+            incidentId: incident.id,
+            type: NotificationType.SOS_ALERT,
+            title: 'Trusted Contact SOS Alert',
+            message: `Your trusted contact ${userWithTrusted.name} has triggered an SOS. Location: ${incident.locationAddress || 'unknown location'}.`,
+            channels: [NotificationChannel.IN_APP] as NotificationChannel[],
+            sentAt: new Date(),
+          };
+          await this.prisma.notification.create({
+            data: inAppNotification,
+          });
+          await this.dispatchNotification({
+            ...inAppNotification,
+            incidentId: inAppNotification.incidentId ?? undefined,
+          });
+        }
       }
     }
 
@@ -460,14 +493,15 @@ export class IncidentsService {
             dataPayload.incidentId = params.incidentId;
           }
 
-          await this.fcmService.sendToTokens(
-            registrationTokens,
-            {
-              title: params.title,
-              body: params.message,
-            },
-            dataPayload,
-          );
+          // await this.fcmService.sendToTokens(
+          //   registrationTokens,
+          //   {
+          //     title: params.title,
+          //     body: params.message,
+          //   },
+          //   dataPayload,
+          // );
+          this.logger.log(`Push notification disabled - FCM removed`);
         }
       } catch (error) {
         this.logger.error(`Failed to dispatch push notification for user ${params.userId}`, error as Error);

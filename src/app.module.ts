@@ -15,6 +15,10 @@ import { DeviceTokensModule } from './device-tokens/device-tokens.module';
 import { MediaModule } from './media/media.module';
 import { AuditModule } from './audit/audit.module';
 import { StreamingModule } from './streaming/streaming.module';
+import { MapsModule } from './maps/maps.module';
+import { AdminModule } from './admin/admin.module';
+import { UserRecordingsModule } from './user-recordings/user-recordings.module';
+import { RecordingsGateway } from './recordings/recordings.gateway';
 
 @Module({
   imports: [
@@ -26,7 +30,7 @@ import { StreamingModule } from './streaming/streaming.module';
     AuthModule,
     UsersModule,
     IncidentsModule,
-    MessagingModule,
+    // MessagingModule, // Removed Firebase FCM
     RedisModule,
     PathGuardModule,
     DangerZonesModule,
@@ -35,6 +39,9 @@ import { StreamingModule } from './streaming/streaming.module';
     MediaModule,
     AuditModule,
     StreamingModule,
+    MapsModule,
+    AdminModule,
+    UserRecordingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

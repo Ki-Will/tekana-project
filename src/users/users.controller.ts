@@ -1,10 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Request } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiParam, ApiBody } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateTrustedContactDto } from './dto/create-trusted-contact.dto';
 import { UserRole } from '@prisma/client';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/guards/roles.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -114,8 +116,13 @@ export class UsersController {
   }
 
   @Patch(':id/role')
+  // @UseGuards(RolesGuard)
+  // @Roles('SUPER_ADMIN', 'ADMIN', 'EMERGENCY_DISPATCHER')
   @ApiOperation({ summary: 'Update user role' })
+  @ApiParam({ name: 'id', description: 'User ID to update role for' })
+  @ApiBody({ schema: { type: 'object', properties: { role: { type: 'string', enum: ['CITIZEN', 'COMMUNITY_RESPONDER', 'POLICE_OFFICER', 'ADMIN', 'SUPER_ADMIN', 'EMERGENCY_DISPATCHER', 'MEDICAL_RESPONDER', 'FIRE_RESPONDER'] } } } })
   @ApiResponse({ status: 200, description: 'User role updated successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   updateUserRole(@Param('id') id: string, @Body('role') role: UserRole) {
     return this.usersService.updateUserRole(id, role);
   }
@@ -148,5 +155,12 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Trusted contact removed successfully' })
   removeTrustedContact(@Param('id') userId: string, @Param('contactId') contactId: string) {
     return this.usersService.removeTrustedContact(userId, contactId);
+  }
+
+  @Get(':id/notifications')
+  @ApiOperation({ summary: 'Get user notifications' })
+  @ApiResponse({ status: 200, description: 'Notifications retrieved successfully' })
+  getUserNotifications(@Param('id') userId: string) {
+    return this.usersService.getUserNotifications(userId);
   }
 }

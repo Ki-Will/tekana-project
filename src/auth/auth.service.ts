@@ -21,8 +21,12 @@ export class AuthService {
   ) {}
 
   async validateUser(phone: string, password?: string): Promise<User | null> {
+    if (!phone) {
+      return null;
+    }
+    const normalizedPhone = this.normalizePhone(phone);
     const user = await this.prisma.user.findUnique({
-      where: { phone },
+      where: { phone: normalizedPhone },
     });
 
     if (!user || !user.isActive) {
@@ -77,6 +81,8 @@ export class AuthService {
         email: user.email ?? undefined,
         role: user.role,
         isVerified: user.isVerified,
+        lastLoginAt: user.lastLoginAt ?? undefined,
+        createdAt: user.createdAt,
       },
       token,
       expiresIn,
@@ -86,11 +92,13 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
     const { phone, name, email, password, role = UserRole.CITIZEN } = registerDto;
 
+    const normalizedPhone = this.normalizePhone(phone);
+
     // Check if user already exists
     const existingUser = await this.prisma.user.findFirst({
       where: {
         OR: [
-          { phone },
+          { phone: normalizedPhone },
           ...(email ? [{ email }] : []),
         ],
       },
@@ -134,6 +142,7 @@ export class AuthService {
         email: user.email ?? undefined,
         role: user.role,
         isVerified: user.isVerified,
+        createdAt: user.createdAt,
       },
       token,
       expiresIn,
@@ -241,6 +250,8 @@ export class AuthService {
         email: user.email ?? undefined,
         role: user.role,
         isVerified: user.isVerified,
+        lastLoginAt: user.lastLoginAt ?? undefined,
+        createdAt: user.createdAt,
       },
       token,
       expiresIn,
@@ -260,7 +271,7 @@ export class AuthService {
   }
 
   private normalizePhone(phone: string): string {
-    return phone.replace(/\s+/g, '');
+    return phone ? phone.replace(/\s+/g, '') : '';
   }
 
   private buildOtpCacheKey(phone: string): string {

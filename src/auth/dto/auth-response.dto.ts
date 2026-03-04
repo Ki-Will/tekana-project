@@ -11,6 +11,8 @@ export class AuthResponseDto {
       email: 'john.doe@example.com',
       role: UserRole.CITIZEN,
       isVerified: true,
+      lastLoginAt: '2023-10-01T12:00:00.000Z',
+      createdAt: '2023-09-01T12:00:00.000Z',
     },
   })
   user: {
@@ -20,6 +22,8 @@ export class AuthResponseDto {
     email?: string;
     role: UserRole;
     isVerified: boolean;
+    lastLoginAt?: Date;
+    createdAt: Date;
   };
 
   @ApiProperty({

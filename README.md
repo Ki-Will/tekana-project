@@ -133,7 +133,59 @@ docker-compose --profile production up -d
 - **MinIO Console**: http://localhost:9001 (minioadmin/minioadmin)
 - **RTMP Stream**: rtmp://localhost:1935/live
 
-## 📡 API Endpoints
+## �️ PathGuard - Night Walking Protection
+
+PathGuard provides real-time safety monitoring for users walking alone at night or in unsafe areas. It tracks user location against a planned route and automatically triggers emergency alerts if safety thresholds are breached.
+
+### How It Works
+
+1. **Start Session**:
+   - User specifies start location, destination, and optional safety parameters
+   - System creates a unique PathGuard session with configurable thresholds
+
+2. **Location Reporting**:
+   - Mobile app reports GPS location periodically via `POST /api/path-guard/:sessionId/location`
+   - System validates location updates against movement and route deviation rules
+
+3. **Safety Monitoring**:
+   - **Route Deviation**: Alerts if user strays more than threshold distance from planned path
+   - **Immobility Detection**: Triggers alert if no movement detected for configured timeout
+   - **Movement Validation**: Ensures location updates are realistic (speed/accuracy checks)
+
+4. **Emergency Trigger**:
+   - If safety breach detected, system automatically:
+     - Creates critical incident with location and reason
+     - Sends push notifications to user and trusted contacts
+     - Auto-assigns nearby available emergency responders
+     - Marks session as emergency-triggered
+
+5. **Session Management**:
+   - Users can complete sessions manually or automatically on emergency
+   - Location history is stored for analysis and response coordination
+
+### Configuration
+
+PathGuard behavior is configurable via environment variables:
+
+- `PATH_GUARD_DEVIATION_THRESHOLD_METERS`: Maximum allowed deviation from route (default: 50m)
+- `PATH_GUARD_IMMOBILITY_TIMEOUT_SECONDS`: Maximum inactivity before alert (default: 300s)
+- `PATH_GUARD_MOVEMENT_THRESHOLD_METERS`: Minimum distance for "movement" (default: 3m)
+- `PATH_GUARD_MOVEMENT_SPEED_THRESHOLD_MS`: Minimum speed for "movement" (default: 0.5 m/s)
+
+### API Endpoints
+
+- `POST /api/path-guard/start` - Start new PathGuard session
+- `GET /api/path-guard/active` - Get current active session
+- `POST /api/path-guard/:sessionId/location` - Report location update
+- `POST /api/path-guard/:sessionId/complete` - Complete session manually
+
+### Safety Features
+
+- Automatic responder dispatch based on proximity and availability
+- Integration with incident management system
+- Real-time notifications via push and SMS
+- Geocoded addresses for precise emergency response
+- Offline-capable location reporting
 
 ### Authentication
 - `POST /api/auth/login` - User login
@@ -175,6 +227,8 @@ Tekana supports RTMP live streaming with automatic recording and upload to MinIO
    - Server: `rtmp://localhost:1935/live`
    - Stream Key: `{streamKey}` (from incident response)
    - Start streaming
+
+   **Audio-Only Streaming:** Audio-only streaming is supported. In OBS, disable video output in Settings > Video > Base (Canvas) Resolution and Output (Scaled) Resolution set to 1x1 or use an audio-only source.
 
 3. **Stop Streaming:**
    Stop the stream in OBS. The recording is automatically saved locally to `./recordings` and uploaded to MinIO at `streams/{streamKey}-{timestamp}.flv`.
