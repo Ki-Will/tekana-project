@@ -60,3 +60,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 *.wt
 ./recordings/*
+
+# Local Docker Compose override (for per-machine port conflicts)
+docker-compose.override.yml

@@ -7,8 +7,6 @@ import * as bcrypt from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
-import { RedisService } from '../redis/redis.service';
-import { RabbitMQService } from '../messaging/rabbitmq.service';
 
 @Injectable()
 export class AuthService {
@@ -16,8 +14,6 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private configService: ConfigService,
-    private redisService: RedisService,
-    private rabbitMQService: RabbitMQService,
   ) {}
 
   async validateUser(phone: string, password?: string): Promise<User | null> {
@@ -159,24 +155,25 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    const otpKey = this.buildOtpCacheKey(normalizedPhone);
-    const storedEntry = await this.redisService.get<{ code: string; attempts: number }>(otpKey);
+    // OTP verification disabled for Wi-Fi independence
+    // const otpKey = this.buildOtpCacheKey(normalizedPhone);
+    // const storedEntry = await this.redisService.get<{ code: string; attempts: number }>(otpKey);
 
-    if (!storedEntry) {
-      throw new UnauthorizedException('OTP expired or not found');
-    }
+    // if (!storedEntry) {
+    //   throw new UnauthorizedException('OTP expired or not found');
+    // }
 
-    if (!this.isValidOtpFormat(otp)) {
-      await this.incrementOtpAttempts(otpKey, storedEntry);
-      throw new UnauthorizedException('Invalid OTP format');
-    }
+    // if (!this.isValidOtpFormat(otp)) {
+    //   await this.incrementOtpAttempts(otpKey, storedEntry);
+    //   throw new UnauthorizedException('Invalid OTP format');
+    // }
 
-    if (storedEntry.code !== otp) {
-      await this.incrementOtpAttempts(otpKey, storedEntry);
-      throw new UnauthorizedException('Invalid OTP');
-    }
+    // if (storedEntry.code !== otp) {
+    //   await this.incrementOtpAttempts(otpKey, storedEntry);
+    //   throw new UnauthorizedException('Invalid OTP');
+    // }
 
-    await this.redisService.del(otpKey);
+    // await this.redisService.del(otpKey);
 
     if (!user.isVerified) {
       await this.prisma.user.update({
@@ -198,37 +195,38 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    const otpKey = this.buildOtpCacheKey(normalizedPhone);
-    const rateLimitKey = `${otpKey}:cooldown`;
-    const otpTtl = this.configService.get<number>('OTP_TTL_SECONDS', 300);
-    const resendCooldown = this.configService.get<number>('OTP_RESEND_COOLDOWN_SECONDS', 60);
-    const maxAttempts = this.configService.get<number>('OTP_MAX_ATTEMPTS', 5);
+    // OTP sending disabled for Wi-Fi independence
+    // const otpKey = this.buildOtpCacheKey(normalizedPhone);
+    // const rateLimitKey = `${otpKey}:cooldown`;
+    // const otpTtl = this.configService.get<number>('OTP_TTL_SECONDS', 300);
+    // const resendCooldown = this.configService.get<number>('OTP_RESEND_COOLDOWN_SECONDS', 60);
+    // const maxAttempts = this.configService.get<number>('OTP_MAX_ATTEMPTS', 5);
 
-    const existingCooldown = await this.redisService.get<string>(rateLimitKey);
-    if (existingCooldown) {
-      throw new HttpException('OTP already sent. Please wait before requesting again.', HttpStatus.TOO_MANY_REQUESTS);
-    }
+    // const existingCooldown = await this.redisService.get<string>(rateLimitKey);
+    // if (existingCooldown) {
+    //   throw new HttpException('OTP already sent. Please wait before requesting again.', HttpStatus.TOO_MANY_REQUESTS);
+    // }
 
-    const otpCode = this.generateOtpCode();
-    await this.redisService.set(
-      otpKey,
-      {
-        code: otpCode,
-        attempts: 0,
-        maxAttempts,
-      },
-      otpTtl,
-    );
+    // const otpCode = this.generateOtpCode();
+    // await this.redisService.set(
+    //   otpKey,
+    //   {
+    //     code: otpCode,
+    //     attempts: 0,
+    //     maxAttempts,
+    //   },
+    //   otpTtl,
+    // );
 
-    await this.redisService.set(rateLimitKey, '1', resendCooldown);
+    // await this.redisService.set(rateLimitKey, '1', resendCooldown);
 
-    await this.rabbitMQService.publish('auth.otp.sent', {
-      userId: user.id,
-      phone: normalizedPhone,
-      code: otpCode,
-      ttlSeconds: otpTtl,
-      sentAt: new Date().toISOString(),
-    });
+    // await this.rabbitMQService.publish('auth.otp.sent', {
+    //   userId: user.id,
+    //   phone: normalizedPhone,
+    //   code: otpCode,
+    //   ttlSeconds: otpTtl,
+    //   sentAt: new Date().toISOString(),
+    // });
   }
 
   async refreshToken(user: User): Promise<AuthResponseDto> {
@@ -291,25 +289,25 @@ export class AuthService {
     return otpRegex.test(otp);
   }
 
-  private async incrementOtpAttempts(
-    otpKey: string,
-    entry: { code: string; attempts: number; maxAttempts?: number },
-  ): Promise<void> {
-    const maxAttempts = entry.maxAttempts ?? this.configService.get<number>('OTP_MAX_ATTEMPTS', 5);
-    const attempts = entry.attempts + 1;
+  // private async incrementOtpAttempts(
+  //   otpKey: string,
+  //   entry: { code: string; attempts: number; maxAttempts?: number },
+  // ): Promise<void> {
+  //   const maxAttempts = entry.maxAttempts ?? this.configService.get<number>('OTP_MAX_ATTEMPTS', 5);
+  //   const attempts = entry.attempts + 1;
 
-    if (attempts >= maxAttempts) {
-      await this.redisService.del(otpKey);
-      throw new UnauthorizedException('OTP attempts exceeded');
-    }
+  //   if (attempts >= maxAttempts) {
+  //     await this.redisService.del(otpKey);
+  //     throw new UnauthorizedException('OTP attempts exceeded');
+  //   }
 
-    await this.redisService.set(
-      otpKey,
-      {
-        ...entry,
-        attempts,
-        maxAttempts,
-      },
-    );
-  }
+  //   await this.redisService.set(
+  //     otpKey,
+  //     {
+  //       ...entry,
+  //       attempts,
+  //       maxAttempts,
+  //     },
+  //   );
+  // }
 }

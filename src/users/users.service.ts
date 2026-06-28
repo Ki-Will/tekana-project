@@ -8,6 +8,8 @@ import { User, UserRole, Prisma } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateTrustedContactDto } from './dto/create-trusted-contact.dto';
 
+
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
