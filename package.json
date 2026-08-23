@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "node api.js && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node api.js && nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main.js",
@@ -34,23 +34,16 @@
     "@nestjs/microservices": "^11.0.1",
     "@nestjs/passport": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
-
     "@nestjs/platform-socket.io": "^11.1.15",
-
     "@nestjs/serve-static": "^5.0.4",
-
     "@nestjs/swagger": "^11.0.0",
-
     "@nestjs/websockets": "^11.1.15",
-
     "@prisma/client": "^5.6.0",
     "amqplib": "^0.10.3",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
-
     "cloudinary": "^2.9.0",
-
     "ioredis": "^5.4.2",
     "nodemailer": "^6.9.7",
     "passport": "^0.6.0",
@@ -58,9 +51,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-
     "socket.io": "^4.8.3",
-
     "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0"
   },
